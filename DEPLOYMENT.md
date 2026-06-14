@@ -61,8 +61,9 @@ cp backend/.env.example backend/.env
 # 3. Fetch the system prompt (single HTTPS call — no repo clone)
 ./scripts/fetch-prompt.sh
 
-# 4. Seed initial invite codes (one per line)
-nano data/codes.txt
+# 4. Generate initial invite codes (20 by default)
+./scripts/seed-codes.sh
+# To generate a different number: ./scripts/seed-codes.sh 50
 
 # 5. Build and start the container
 docker compose up -d
