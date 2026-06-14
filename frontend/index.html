@@ -378,8 +378,12 @@
       uploadSection.hidden     = state !== 'upload';
       processingSection.hidden = state !== 'processing';
       reportSection.hidden     = state !== 'report';
-      // Scroll to top of page on every state transition
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Scroll the active section into view immediately
+      if (state === 'processing') {
+        processingSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (state === 'report') {
+        reportSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
 
     // ── Step animation ───────────────────────────────────────────────────────
@@ -441,6 +445,11 @@
       if (!files.length)  return showError('Selecciona un PDF. / Select a PDF.');
       if (files.length>2) return showError('Máximo 2 PDFs. / Max 2 PDFs.');
 
+      // Immediate feedback — user knows the click registered
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="show-es">Analizando…</span><span class="show-en">Analysing…</span>';
+
       setState('processing');
       startProgress();
 
@@ -492,6 +501,8 @@
 
       } catch(err) {
         setState('upload');
+        btn.disabled = false;
+        btn.innerHTML = '<span class="show-es">Analizar mi declaración</span><span class="show-en">Analyse my return</span><span class="btn-arrow">→</span>';
         showError(err.message);
       }
     });

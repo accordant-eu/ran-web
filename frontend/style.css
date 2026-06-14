@@ -582,11 +582,21 @@ footer {
 
 /* ── Print ───────────────────────────────────────────────────────────────── */
 @media print {
-  nav, .hero, #upload-section, .report-header .btn-outline,
-  .streaming-bar, .codes-block, .report-close-note, footer { display: none !important; }
-  .report-body { border: none; padding: 0; font-size: 0.9rem; }
+  nav,
+  #upload-section,
+  #processing-section,
+  #streaming-bar,
+  .streaming-bar,
+  .report-header .btn-outline,
+  .codes-block,
+  .report-close-note,
+  footer { display: none !important; }
+
+  #report-section { display: block !important; }
+  .report-body { border: none !important; padding: 0 !important; font-size: 0.9rem; }
   .report-body table { page-break-inside: avoid; }
-  body { background: white; }
+  body { background: white !important; }
+  main { padding: 0 !important; }
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */
