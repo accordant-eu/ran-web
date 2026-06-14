@@ -89,10 +89,11 @@ This is not just a coding convention. `BytesIO` has no disk path. There is no te
 The extracted text (not the binary PDF) is sent to Anthropic's API over HTTPS. Anthropic's published policy for API usage:
 
 > API inputs and outputs are not used to train Anthropic's models by default.
+> API logs (inputs and outputs) are retained by Anthropic for **7 days**, then permanently deleted.
 
 Reference: [https://www.anthropic.com/legal/aio](https://www.anthropic.com/legal/aio)
 
-This is an external trust dependency. We link to Anthropic's published policy and do not make claims beyond it.
+This is an external trust dependency. We link to Anthropic's published policy and do not make claims beyond it. We have applied for Zero Data Retention (ZDR) with Anthropic; once approved, even the 7-day log window is eliminated.
 
 ### The system prompt
 
