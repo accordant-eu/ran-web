@@ -17,6 +17,10 @@ CODES_FILE="$DATA_DIR/codes.txt"
 mkdir -p "$DATA_DIR"
 touch "$CODES_FILE"
 
+# Ensure the container's ran user (uid 1000) can write to data/
+chown -R 1000:1000 "$DATA_DIR" 2>/dev/null || true
+chmod 664 "$CODES_FILE"
+
 # Load existing codes to avoid duplicates
 existing=$(grep -v "^USED:" "$CODES_FILE" 2>/dev/null | grep -v "^$" || true)
 used=$(grep "^USED:" "$CODES_FILE" 2>/dev/null | sed 's/^USED://' || true)
