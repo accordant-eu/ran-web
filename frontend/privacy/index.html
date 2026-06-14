@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Política de privacidad — Rán</title>
+  <link rel="stylesheet" href="../style.css" />
+  <style>
+    /* Privacy-page specific overrides */
+    .policy-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .policy-header {
+      border-bottom: 2px solid var(--navy);
+      padding-bottom: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .policy-header h1 {
+      font-size: 1.75rem;
+      color: var(--navy);
+      margin: 0 0 0.35rem;
+    }
+    .policy-header .policy-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .policy-lang-note {
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-brd);
+      border-radius: var(--r);
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      color: var(--amber-tx);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+    .policy-section {
+      margin-bottom: 2.25rem;
+    }
+    .policy-section h2 {
+      font-size: 1.15rem;
+      color: var(--navy);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .policy-section h3 {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
+      font-weight: 600;
+    }
+    .policy-section p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .policy-section ul {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0 0 0.75rem 1.25rem;
+      padding: 0;
+    }
+    .policy-section li {
+      margin-bottom: 0.3rem;
+    }
+    .policy-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      margin-bottom: 1rem;
+    }
+    .policy-table th {
+      background: var(--navy);
+      color: #fff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      font-weight: 600;
+    }
+    .policy-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .policy-table tr:nth-child(even) td {
+      background: #f9f8f6;
+    }
+    .policy-table td:first-child {
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--navy);
+    }
+    .badge-no  { color: var(--green); font-weight: 700; }
+    .badge-yes { color: var(--red);   font-weight: 700; }
+    .badge-7   { color: var(--blue);  font-weight: 700; }
+    .alert-box {
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-brd);
+      border-radius: var(--r);
+      padding: 0.75rem 1rem;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .alert-box strong { color: var(--amber-tx); }
+    .rights-table td:first-child { white-space: normal; }
+    .divider-lang {
+      border: none;
+      border-top: 3px double var(--navy);
+      margin: 3rem 0;
+    }
+    .lang-banner {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+    }
+    @media (max-width: 600px) {
+      .policy-table { font-size: 0.78rem; }
+      .policy-table td:first-child { white-space: normal; }
+    }
+  </style>
+</head>
+<body class="lang-es">
+
+  <nav>
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <a href="/" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:0.5rem;">
+          <span class="logo">Rán</span>
+          <span class="nav-tagline">
+            <span class="show-es">Tu declaración de la renta, explicada con claridad.</span>
+            <span class="show-en">Your Spanish tax return, explained in plain English.</span>
+          </span>
+        </a>
+      </div>
+      <div class="nav-right">
+        <button class="lang-btn" id="lang-toggle">
+          <span class="show-es">EN</span>
+          <span class="show-en">ES</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="policy-wrap">
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         VERSIÓN ESPAÑOLA (official)
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="show-es">
+      <div class="lang-banner">🇪🇸 Versión oficial · Español</div>
+
+      <div class="policy-header">
+        <h1>Política de Privacidad</h1>
+        <div class="policy-meta">ran.accordant.eu · Última actualización: 14 de junio de 2026</div>
+      </div>
+
+      <div class="policy-lang-note">
+        Esta es la versión oficial de la política. La versión en inglés, disponible más abajo, es una traducción de cortesía. En caso de discrepancia, prevalece el texto en español.
+      </div>
+
+      <!-- 1. Responsable -->
+      <div class="policy-section">
+        <h2>1. Responsable del tratamiento</h2>
+        <table class="policy-table">
+          <tr><td>Responsable</td><td>Johan Hellman</td></tr>
+          <tr><td>Actividad</td><td>Proyecto personal de exploración de IA aplicada a finanzas y fiscalidad</td></tr>
+          <tr><td>Sitio web principal</td><td>accordant.eu</td></tr>
+          <tr><td>Contacto de privacidad</td><td><a href="mailto:rufus@accordant.eu">rufus@accordant.eu</a></td></tr>
+          <tr><td>Delegado de Protección de Datos</td><td>No designado. Dado el carácter personal y la escala reducida del tratamiento, no es exigible conforme al artículo 37 RGPD ni al artículo 34 LOPDGDD.</td></tr>
+        </table>
+        <p>Rán es una herramienta de elaboración propia, sin ánimo de lucro y de acceso restringido mediante código de invitación personal.</p>
+      </div>
+
+      <!-- 2. Qué datos -->
+      <div class="policy-section">
+        <h2>2. Qué datos tratamos y cómo se recogen</h2>
+
+        <h3>2.1 Datos que tú nos envías</h3>
+        <p>Cuando subes tu declaración de la renta (borrador del Modelo 100 de la AEAT) y pulsas «Analizar», nos envías:</p>
+        <ul>
+          <li>El contenido de uno o dos archivos PDF de tu declaración del IRPF.</li>
+          <li>El texto extraído de esos PDFs: nombre completo, NIF/NIE, domicilio fiscal, rendimientos del trabajo y del capital, datos de situación familiar y personal, deducciones aplicadas (incluidas las relativas a discapacidad), cuotas a ingresar o devolver, y cualquier otro dato que figure en la declaración.</li>
+          <li>El código de invitación utilizado (p.ej. <code>RENTA-XXXX</code>).</li>
+          <li>Tu preferencia de idioma (español o inglés).</li>
+        </ul>
+
+        <div class="alert-box">
+          <strong>⚠️ Datos de categorías especiales (Art. 9 RGPD):</strong> Las declaraciones de la renta pueden contener referencias a situaciones de discapacidad, grado de dependencia u otras circunstancias de salud a través de las deducciones solicitadas. Estos datos son <strong>categorías especiales de datos sensibles</strong>. Para poder enviar el análisis, el formulario requiere que marques una casilla de consentimiento expreso específica para estos datos. Puedes retirar ese consentimiento en cualquier momento; consulta la sección 6.
+        </div>
+
+        <h3>2.2 Datos técnicos generados automáticamente</h3>
+        <table class="policy-table">
+          <thead><tr><th>Dato</th><th>Registro</th><th>¿Se escribe en disco?</th></tr></thead>
+          <tbody>
+            <tr><td>IP (archivos estáticos: HTML, CSS, JS)</td><td>Log de acceso de nginx</td><td><span class="badge-yes">Sí</span> — comportamiento estándar del servidor web</td></tr>
+            <tr><td>IP (subida de PDFs — ruta <code>/process</code>)</td><td>—</td><td><span class="badge-no">No</span> — <code>access_log off</code> configurado explícitamente</td></tr>
+            <tr><td>IP (ruta <code>/health</code>)</td><td>—</td><td><span class="badge-no">No</span> — <code>access_log off</code> también activo</td></tr>
+            <tr><td>Limitación de tasa por IP (anti-abuso)</td><td>Búfer RAM de nginx</td><td><span class="badge-no">No</span> — uso transitorio en memoria</td></tr>
+            <tr><td>Metadatos operativos de cada análisis</td><td><code>ops_log.jsonl</code></td><td><span class="badge-yes">Sí</span> — ver sección 2.3</td></tr>
+          </tbody>
+        </table>
+
+        <h3>2.3 Registro operativo (<code>ops_log.jsonl</code>)</h3>
+        <p>Al completarse cada análisis se anota una línea JSON con los siguientes campos:</p>
+        <table class="policy-table">
+          <thead><tr><th>Campo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>ts</code></td><td>Marca de tiempo UTC</td></tr>
+            <tr><td><code>code_used</code></td><td>Código de invitación utilizado</td></tr>
+            <tr><td><code>returns_uploaded</code></td><td>Número de PDFs subidos (1 o 2)</td></tr>
+            <tr><td><code>file_size_bytes</code></td><td>Tamaño total de los archivos</td></tr>
+            <tr><td><code>response_time_ms</code></td><td>Duración del análisis</td></tr>
+            <tr><td><code>completed</code></td><td>Si el análisis finalizó correctamente</td></tr>
+            <tr><td><code>input_tokens</code> / <code>output_tokens</code> / <code>cost_usd</code></td><td>Uso de tokens y coste estimado de la API</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Naturaleza de estos datos:</strong> El registro no almacena el contenido de tu declaración. Sin embargo, si el código de invitación fue asignado nominalmente a una persona, el campo <code>code_used</code> puede constituir un <strong>identificador seudónimo</strong> que vincule la entrada con esa persona. Conforme al Art. 4(1) RGPD y al Considerando 26, estos datos se tratan como <strong>datos personales seudónimos</strong>.</p>
+      </div>
+
+      <!-- 3. Finalidades y base jurídica -->
+      <div class="policy-section">
+        <h2>3. Finalidades del tratamiento y base jurídica</h2>
+        <table class="policy-table">
+          <thead><tr><th>Finalidad</th><th>Base jurídica</th></tr></thead>
+          <tbody>
+            <tr><td>Analizar la declaración y generar el informe explicativo</td><td>Consentimiento — Art. 6.1.a RGPD</td></tr>
+            <tr><td>Tratamiento de datos de salud/discapacidad contenidos en la declaración</td><td>Consentimiento explícito — Art. 9.2.a RGPD y Art. 9.2.a LOPDGDD (casilla específica en el formulario)</td></tr>
+            <tr><td>Registro operativo de metadatos (timestamps, tamaños, rendimiento, costes)</td><td>Interés legítimo — Art. 6.1.f RGPD. El responsable necesita controlar la estabilidad técnica y los costes operativos. El impacto para el interesado es mínimo: sólo metadatos seudónimos de escaso valor identificador.</td></tr>
+            <tr><td>Limitación de tasa de acceso (protección frente a usos abusivos)</td><td>Interés legítimo — Art. 6.1.f RGPD. Las IPs se usan en RAM durante la sesión; nunca se escriben en disco para este fin.</td></tr>
+          </tbody>
+        </table>
+        <p>La provisión de datos es <strong>voluntaria</strong> pero <strong>necesaria para la prestación del servicio</strong>: sin el PDF y el código de invitación no es posible generar el análisis. No existe obligación legal ni contractual de proporcionarlos.</p>
+      </div>
+
+      <!-- 4. Arquitectura de retención cero y transferencia -->
+      <div class="policy-section">
+        <h2>4. Arquitectura de retención cero y transferencia a Anthropic</h2>
+
+        <h3>4.1 En nuestro servidor: retención cero de contenido documental</h3>
+        <p>Los PDFs que subes <strong>jamás se escriben en disco</strong>. El tratamiento es íntegramente en memoria (RAM):</p>
+        <ol style="font-size:0.88rem; line-height:1.7; color:var(--text); margin-left:1.25rem; margin-bottom:0.75rem;">
+          <li>El archivo se recibe por HTTPS y se almacena en un búfer <code>BytesIO</code> de Python (RAM).</li>
+          <li>Se extrae el texto con <code>pdfplumber</code> — sin crear archivos temporales en ningún momento.</li>
+          <li>El texto extraído se envía a la API de Anthropic por HTTPS.</li>
+          <li>El búfer se libera. El PDF y el texto dejan de existir en el servidor.</li>
+          <li>El informe se transmite por streaming directamente a tu navegador y no se almacena.</li>
+        </ol>
+        <p>Al cerrar la pestaña, no queda ningún contenido de tu declaración que recuperar.</p>
+
+        <h3>4.2 Transferencia internacional a Anthropic (encargado del tratamiento, EE.UU.)</h3>
+        <table class="policy-table">
+          <tr><td>Encargado del tratamiento</td><td>Anthropic PBC, 548 Market Street, San Francisco, CA 94104, EE.UU.</td></tr>
+          <tr><td>Instrumento de garantía (Art. 46 RGPD)</td><td>Cláusulas Contractuales Tipo (CCT) — Decisión 2021/914 + Marco de Privacidad UE-EE.UU. (EU-US Data Privacy Framework)</td></tr>
+          <tr><td>Contrato de encargo (Art. 28 RGPD)</td><td>Anthropic ofrece un Data Processing Addendum que cubre las exigencias del Art. 28.3 RGPD.</td></tr>
+          <tr><td>Evaluación de impacto de la transferencia (TIA)</td><td>El responsable ha evaluado el riesgo residual. La transmisión de texto fiscal por HTTPS a un proveedor sujeto a CCT y DPF, con retención máxima de 7 días y sin uso para entrenamiento, se considera de riesgo residual bajo y proporcional al objetivo del servicio.</td></tr>
+          <tr><td>Retención por Anthropic</td><td>Los registros de la API (texto enviado y respuesta) se conservan <span class="badge-7">7 días</span> y se eliminan permanentemente. No se usan con fines comerciales.</td></tr>
+          <tr><td>Uso para entrenamiento</td><td>Anthropic no utiliza las entradas ni salidas de su API para entrenar sus modelos. Esta es la política contractual aplicable a los usuarios de la API, no una configuración por defecto. <a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">Política de retención →</a></td></tr>
+          <tr><td>Retención Cero de Datos (ZDR)</td><td>El responsable ha solicitado la activación de ZDR, que eliminaría incluso la ventana de 7 días. Esta sección se actualizará cuando el ZDR esté confirmado.</td></tr>
+        </table>
+      </div>
+
+      <!-- 5. DPIA -->
+      <div class="policy-section">
+        <h2>5. Evaluación de Impacto (EIPD/DPIA)</h2>
+        <p>El responsable ha realizado una evaluación preliminar conforme al Art. 35 RGPD y a la lista de tratamientos que requieren EIPD de la AEPD (2019).</p>
+        <p><strong>Factores de riesgo identificados:</strong> tratamiento de datos de categorías especiales (Art. 9), uso de IA generativa, transferencia internacional (EE.UU.).</p>
+        <p><strong>Factores mitigantes relevantes:</strong> (a) escala mínima — acceso exclusivo por invitación personal, sin procesamiento masivo; (b) el contenido documental no se almacena; (c) no se toman decisiones automatizadas con efectos jurídicos; (d) el interesado inicia voluntariamente el análisis; (e) una EIPD formal no es exigible para personas físicas en tratamientos de pequeña escala análogos (Considerando 91 RGPD).</p>
+        <p>El responsable estima que el tratamiento en sus circunstancias actuales no alcanza el umbral que haría preceptiva una EIPD formal. <strong>Si la escala se ampliara materialmente (acceso público, procesamiento masivo), se realizará una EIPD completa antes de dicha ampliación.</strong></p>
+      </div>
+
+      <!-- 6. Conservación -->
+      <div class="policy-section">
+        <h2>6. Plazos de conservación y derechos</h2>
+
+        <h3>6.1 Plazos de conservación</h3>
+        <table class="policy-table">
+          <thead><tr><th>Categoría de dato</th><th>Plazo</th></tr></thead>
+          <tbody>
+            <tr><td>Contenido del PDF y texto extraído</td><td><span class="badge-no">Ninguno</span> — liberado de RAM al finalizar la solicitud</td></tr>
+            <tr><td>Informe generado</td><td><span class="badge-no">Ninguno</span> — transmitido por streaming, no almacenado</td></tr>
+            <tr><td>Logs de acceso de nginx (IPs en archivos estáticos)</td><td>Máximo <strong>30 días</strong> — rotación automática</td></tr>
+            <tr><td>Registro operativo <code>ops_log.jsonl</code></td><td>Máximo <strong>12 meses</strong> desde cada entrada; supresión antes del vencimiento</td></tr>
+            <tr><td>Registros de Anthropic</td><td><span class="badge-7">7 días</span> — política publicada del proveedor</td></tr>
+          </tbody>
+        </table>
+
+        <h3>6.2 Tus derechos</h3>
+        <p>Conforme al RGPD (artículos 15–22) y a la LOPDGDD (artículos 12–18):</p>
+        <table class="policy-table rights-table">
+          <thead><tr><th>Derecho</th><th>Aplicación en este servicio</th></tr></thead>
+          <tbody>
+            <tr><td>Acceso (Art. 15)</td><td>Los únicos datos vinculables a ti son: el código de invitación asignado (si fue nominativo) y las entradas correspondientes en <code>ops_log.jsonl</code>.</td></tr>
+            <tr><td>Rectificación (Art. 16)</td><td>Corrección de datos inexactos en el registro operativo.</td></tr>
+            <tr><td>Supresión (Art. 17)</td><td>Eliminación de tus entradas en el registro operativo y/o IPs en logs de nginx.</td></tr>
+            <tr><td>Limitación (Art. 18)</td><td>Suspensión del tratamiento mientras se resuelve una disputa.</td></tr>
+            <tr><td>Portabilidad (Art. 20)</td><td>Metadatos del registro operativo en formato estructurado legible por máquina.</td></tr>
+            <tr><td>Oposición (Art. 21)</td><td>Oposición al tratamiento basado en interés legítimo (registro operativo).</td></tr>
+            <tr><td>Retirada del consentimiento (Art. 7.3)</td><td>Puedes retirar tu consentimiento en cualquier momento. Dado que el contenido de tu declaración no se almacena, la retirada implica en la práctica: (a) no volver a utilizar el servicio para futuros análisis; y (b) solicitar en su caso la supresión de las entradas del registro operativo. La retirada no afecta a la licitud del tratamiento ya realizado.</td></tr>
+          </tbody>
+        </table>
+        <p>Para ejercer cualquiera de estos derechos, escribe a <strong><a href="mailto:rufus@accordant.eu">rufus@accordant.eu</a></strong> con el asunto <strong>«Derechos RGPD»</strong>. Responderemos en el plazo máximo de un mes (prorrogable a tres meses en casos justificados), conforme al Art. 12 RGPD.</p>
+      </div>
+
+      <!-- 7. Tratamiento automatizado -->
+      <div class="policy-section">
+        <h2>7. Tratamiento automatizado y decisiones automatizadas</h2>
+        <p>Rán utiliza un modelo de IA (Claude, de Anthropic) para analizar el contenido de tu declaración. Esta actividad implica tratamiento automatizado de datos personales.</p>
+        <p><strong>No se toman decisiones automatizadas con efectos jurídicos ni efectos significativos similares</strong> sobre ti en el sentido del Art. 22.1 RGPD. El informe es una explicación informativa. La decisión de presentar, modificar o reclamar la declaración corresponde íntegramente a ti, en su caso con asesoramiento de un profesional habilitado.</p>
+      </div>
+
+      <!-- 8. Cookies -->
+      <div class="policy-section">
+        <h2>8. Cookies y tecnologías de seguimiento</h2>
+        <p>Rán <strong>no utiliza cookies, <code>localStorage</code>, <code>sessionStorage</code> ni ninguna otra forma de almacenamiento persistente en tu dispositivo</strong>. No hay Google Analytics, píxeles de publicidad, redes de seguimiento ni scripts de terceros cargados desde CDN externas.</p>
+        <p>El código de invitación que introduces existe únicamente en la memoria del navegador mientras tienes la pestaña abierta y desaparece al cerrarla o recargarla. El único archivo JavaScript externo a la lógica de la aplicación (<code>marked.min.js</code>) se sirve localmente desde este servidor, sin comunicación con terceros.</p>
+      </div>
+
+      <!-- 9. Autoridad de control -->
+      <div class="policy-section">
+        <h2>9. Autoridad de control</h2>
+        <p>Tienes derecho a presentar una reclamación ante la <strong>Agencia Española de Protección de Datos (AEPD)</strong>:</p>
+        <ul>
+          <li><strong>Web:</strong> <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a></li>
+          <li><strong>Sede:</strong> C/ Jorge Juan, 6, 28001 Madrid</li>
+          <li><strong>Formulario en línea:</strong> www.aepd.es → «Sede electrónica» → «Reclamaciones»</li>
+        </ul>
+        <p>Te animamos a dirigirte primero a nosotros en <a href="mailto:rufus@accordant.eu">rufus@accordant.eu</a> para resolver cualquier inquietud directamente.</p>
+      </div>
+
+      <!-- 10. Cambios -->
+      <div class="policy-section">
+        <h2>10. Cambios en esta política</h2>
+        <p>Los cambios relevantes se comunicarán mediante aviso en el sitio web y actualizando la fecha indicada al inicio. Los cambios que afecten a la base jurídica o a las transferencias internacionales requerirán, cuando proceda, un nuevo consentimiento. Esta política está siempre disponible en <a href="/privacy">ran.accordant.eu/privacy</a>.</p>
+      </div>
+    </div><!-- end .show-es -->
+
+    <hr class="divider-lang" />
+
+    <!-- ══════════════════════════════════════════════════════════════════════
+         ENGLISH VERSION (courtesy translation)
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <div class="show-en">
+      <div class="lang-banner">🇬🇧 Courtesy translation · English</div>
+
+      <div class="policy-header">
+        <h1>Privacy Policy</h1>
+        <div class="policy-meta">ran.accordant.eu · Last updated: 14 June 2026</div>
+      </div>
+
+      <div class="policy-lang-note">
+        The official version of this policy is the Spanish text above. This English translation is provided as a convenience for non-native Spanish speakers. In case of discrepancy, the Spanish text prevails.
+      </div>
+
+      <!-- 1. Controller -->
+      <div class="policy-section">
+        <h2>1. Data controller</h2>
+        <table class="policy-table">
+          <tr><td>Controller</td><td>Johan Hellman</td></tr>
+          <tr><td>Activity</td><td>Personal project exploring AI in finance and tax</td></tr>
+          <tr><td>Main website</td><td>accordant.eu</td></tr>
+          <tr><td>Privacy contact</td><td><a href="mailto:rufus@accordant.eu">rufus@accordant.eu</a></td></tr>
+          <tr><td>Data Protection Officer</td><td>Not appointed. Given the personal nature and small scale of processing, one is not required under Article 37 GDPR or Article 34 LOPDGDD.</td></tr>
+        </table>
+        <p>Rán is a personal, non-commercial tool with access restricted to individually invited users.</p>
+      </div>
+
+      <!-- 2. What data -->
+      <div class="policy-section">
+        <h2>2. What data we process and how</h2>
+
+        <h3>2.1 Data you send when using the service</h3>
+        <p>When you upload your Spanish income tax return (AEAT Modelo 100 borrador) and click "Analyse", you send us:</p>
+        <ul>
+          <li>The content of one or two PDF files of your IRPF return.</li>
+          <li>Text extracted from those PDFs: full name, NIF/NIE, address, employment and investment income, family and personal situation, applied deductions (including disability-related), amount to pay or refund, and any other data in the return.</li>
+          <li>Your invitation code (e.g. <code>RENTA-XXXX</code>).</li>
+          <li>Your language preference (Spanish or English).</li>
+        </ul>
+
+        <div class="alert-box">
+          <strong>⚠️ Special category data (Article 9 GDPR):</strong> Tax returns may contain references to disability, dependency status, or other health circumstances through applied deductions. This is <strong>special category sensitive data</strong>. The form requires you to tick an explicit consent checkbox before submitting. You may withdraw that consent at any time; see section 6.
+        </div>
+
+        <h3>2.2 Automatically generated technical data</h3>
+        <table class="policy-table">
+          <thead><tr><th>Data</th><th>Record</th><th>Written to disk?</th></tr></thead>
+          <tbody>
+            <tr><td>IP (static files: HTML, CSS, JS)</td><td>nginx access log</td><td><span class="badge-yes">Yes</span> — standard web server behaviour</td></tr>
+            <tr><td>IP (PDF uploads — <code>/process</code>)</td><td>—</td><td><span class="badge-no">No</span> — <code>access_log off</code> explicitly configured</td></tr>
+            <tr><td>IP (<code>/health</code>)</td><td>—</td><td><span class="badge-no">No</span> — <code>access_log off</code> also active</td></tr>
+            <tr><td>Rate-limiting by IP (anti-abuse)</td><td>nginx RAM buffer</td><td><span class="badge-no">No</span> — transient, never persisted</td></tr>
+            <tr><td>Operational session metadata</td><td><code>ops_log.jsonl</code></td><td><span class="badge-yes">Yes</span> — see section 2.3</td></tr>
+          </tbody>
+        </table>
+
+        <h3>2.3 Operational log (<code>ops_log.jsonl</code>)</h3>
+        <p>One JSON line is appended per completed analysis:</p>
+        <table class="policy-table">
+          <thead><tr><th>Field</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>ts</code></td><td>UTC timestamp</td></tr>
+            <tr><td><code>code_used</code></td><td>Invitation code used</td></tr>
+            <tr><td><code>returns_uploaded</code></td><td>Number of PDFs uploaded (1 or 2)</td></tr>
+            <tr><td><code>file_size_bytes</code></td><td>Total file size in bytes</td></tr>
+            <tr><td><code>response_time_ms</code></td><td>Analysis duration in milliseconds</td></tr>
+            <tr><td><code>completed</code></td><td>Whether the analysis finished successfully</td></tr>
+            <tr><td><code>input_tokens</code> / <code>output_tokens</code> / <code>cost_usd</code></td><td>Token usage and estimated API cost</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Nature of this data:</strong> The log does not store your return content. However, if the invitation code was individually assigned to a named person, <code>code_used</code> may constitute a <strong>pseudonymous identifier</strong> linking the entry to that person. Under GDPR Article 4(1) and Recital 26, this is treated as <strong>pseudonymous personal data</strong>.</p>
+      </div>
+
+      <!-- 3. Purposes -->
+      <div class="policy-section">
+        <h2>3. Purposes and legal basis</h2>
+        <table class="policy-table">
+          <thead><tr><th>Purpose</th><th>Legal basis</th></tr></thead>
+          <tbody>
+            <tr><td>Analysing the return and generating the report</td><td>Consent — Article 6(1)(a) GDPR</td></tr>
+            <tr><td>Processing health/disability data in the return</td><td>Explicit consent — Article 9(2)(a) GDPR and Article 9(2)(a) LOPDGDD (dedicated checkbox in the form)</td></tr>
+            <tr><td>Operational metadata logging (timestamps, sizes, performance, costs)</td><td>Legitimate interest — Article 6(1)(f) GDPR. The controller needs to monitor technical stability and operational costs. Impact on the data subject is minimal: pseudonymous metadata of very low re-identification value.</td></tr>
+            <tr><td>Rate-limiting (abuse protection)</td><td>Legitimate interest — Article 6(1)(f) GDPR. IPs are used in RAM for this purpose only; never written to disk.</td></tr>
+          </tbody>
+        </table>
+        <p>Providing data is <strong>voluntary</strong> but <strong>necessary for the service</strong>: without the PDF and invitation code, no analysis can be produced. There is no legal or contractual obligation to provide them.</p>
+      </div>
+
+      <!-- 4. Zero-retention and Anthropic -->
+      <div class="policy-section">
+        <h2>4. Zero-retention architecture and transfer to Anthropic</h2>
+
+        <h3>4.1 On our server: zero-retention of document content</h3>
+        <p>The PDFs you upload are <strong>never written to disk</strong>. Processing is entirely in memory (RAM):</p>
+        <ol style="font-size:0.88rem; line-height:1.7; color:var(--text); margin-left:1.25rem; margin-bottom:0.75rem;">
+          <li>The file is received over HTTPS and stored in a Python <code>BytesIO</code> buffer (RAM only).</li>
+          <li>Text is extracted with <code>pdfplumber</code> — no temporary files are created.</li>
+          <li>The extracted text is sent to Anthropic's API over HTTPS.</li>
+          <li>The buffer is released. The PDF and extracted text no longer exist on the server.</li>
+          <li>The report is streamed directly to your browser and is not stored.</li>
+        </ol>
+        <p>When you close the tab, no document content from your return remains anywhere to retrieve.</p>
+
+        <h3>4.2 International transfer to Anthropic (processor in the USA)</h3>
+        <table class="policy-table">
+          <tr><td>Processor</td><td>Anthropic PBC, 548 Market Street, San Francisco, CA 94104, USA</td></tr>
+          <tr><td>Transfer safeguard (Art. 46 GDPR)</td><td>EU Standard Contractual Clauses (SCCs) — Implementing Decision 2021/914 + EU–US Data Privacy Framework</td></tr>
+          <tr><td>Data Processing Agreement (Art. 28 GDPR)</td><td>Anthropic provides a Data Processing Addendum covering the Article 28(3) GDPR requirements.</td></tr>
+          <tr><td>Transfer Impact Assessment (TIA)</td><td>The controller has assessed residual transfer risk. Transmitting fiscal PDF text over HTTPS to an established AI provider bound by SCCs and DPF, with 7-day maximum retention and no model training use, is considered of low residual risk and proportionate.</td></tr>
+          <tr><td>Retention by Anthropic</td><td>API logs retained for <span class="badge-7">7 days</span> then permanently deleted. Security/anti-abuse functions only, not commercial use.</td></tr>
+          <tr><td>Use for training</td><td>Anthropic does not use API inputs or outputs to train its models. This is the contractual policy applicable to API customers, not a default setting. <a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">Retention policy →</a></td></tr>
+          <tr><td>Zero Data Retention (ZDR)</td><td>The controller has applied to Anthropic for ZDR activation, which would eliminate even the 7-day window. This section will be updated when confirmed.</td></tr>
+        </table>
+      </div>
+
+      <!-- 5. DPIA -->
+      <div class="policy-section">
+        <h2>5. Data Protection Impact Assessment (DPIA)</h2>
+        <p>The controller has conducted a preliminary assessment under Article 35 GDPR and the AEPD's mandatory DPIA list (2019).</p>
+        <p><strong>Risk factors identified:</strong> special category data (Art. 9), use of generative AI, international transfer (USA).</p>
+        <p><strong>Mitigating factors:</strong> (a) minimal scale — personal invitation only, no mass processing; (b) document content is never stored; (c) no automated decisions with legal effects; (d) the data subject initiates the analysis voluntarily; (e) formal DPIA is not required for individual controllers at small scale (Recital 91 GDPR).</p>
+        <p>The controller considers that processing under current circumstances does not reach the threshold for a compulsory formal DPIA. <strong>If the service scale were to expand materially (public access, mass processing), a full DPIA will be conducted before such expansion.</strong></p>
+      </div>
+
+      <!-- 6. Retention and rights -->
+      <div class="policy-section">
+        <h2>6. Retention periods and your rights</h2>
+
+        <h3>6.1 Retention periods</h3>
+        <table class="policy-table">
+          <thead><tr><th>Category</th><th>Period</th></tr></thead>
+          <tbody>
+            <tr><td>PDF content and extracted text</td><td><span class="badge-no">None</span> — released from RAM when the request ends</td></tr>
+            <tr><td>Generated report</td><td><span class="badge-no">None</span> — streamed, not stored</td></tr>
+            <tr><td>nginx access logs (IPs for static files)</td><td>Maximum <strong>30 days</strong> — automatic rotation</td></tr>
+            <tr><td>Operational log <code>ops_log.jsonl</code></td><td>Maximum <strong>12 months</strong> per entry; deletion before that limit</td></tr>
+            <tr><td>Anthropic logs</td><td><span class="badge-7">7 days</span> — processor's published policy</td></tr>
+          </tbody>
+        </table>
+
+        <h3>6.2 Your rights</h3>
+        <p>Under GDPR (Articles 15–22) and LOPDGDD (Articles 12–18):</p>
+        <table class="policy-table rights-table">
+          <thead><tr><th>Right</th><th>What it means for this service</th></tr></thead>
+          <tbody>
+            <tr><td>Access (Art. 15)</td><td>The only data linkable to you is: your invitation code (if nominative) and corresponding <code>ops_log.jsonl</code> entries.</td></tr>
+            <tr><td>Rectification (Art. 16)</td><td>Correct inaccurate data in the operational log.</td></tr>
+            <tr><td>Erasure (Art. 17)</td><td>Request deletion of your operational log entries and/or IPs in nginx logs.</td></tr>
+            <tr><td>Restriction (Art. 18)</td><td>Request suspension of processing while a dispute is resolved.</td></tr>
+            <tr><td>Portability (Art. 20)</td><td>Your operational log metadata in structured, machine-readable format.</td></tr>
+            <tr><td>Objection (Art. 21)</td><td>Object to legitimate interest-based processing (operational log).</td></tr>
+            <tr><td>Withdrawal of consent (Art. 7(3))</td><td>You may withdraw consent at any time. Because your return content is not stored, withdrawal means in practice: (a) not using the service for future analyses; and (b) if desired, requesting deletion of your operational log entries. Withdrawal does not affect the lawfulness of processing already carried out.</td></tr>
+          </tbody>
+        </table>
+        <p>To exercise any of these rights, email <strong><a href="mailto:rufus@accordant.eu">rufus@accordant.eu</a></strong> with the subject <strong>"GDPR Rights"</strong>. We will respond within one month (extendable to three in complex cases) under Article 12 GDPR.</p>
+      </div>
+
+      <!-- 7. Automated processing -->
+      <div class="policy-section">
+        <h2>7. Automated processing and automated decisions</h2>
+        <p>Rán uses an AI model (Claude by Anthropic) to analyse the content of your tax return. This involves automated processing of personal data.</p>
+        <p><strong>No automated decisions with legal effects or similarly significant effects</strong> are made about you within the meaning of Article 22(1) GDPR. The generated report is an informational explanation of your return's figures. The decision whether to file, amend, or challenge your return is entirely yours, where appropriate with advice from a qualified professional.</p>
+      </div>
+
+      <!-- 8. Cookies -->
+      <div class="policy-section">
+        <h2>8. Cookies and tracking technologies</h2>
+        <p>Rán <strong>does not use cookies, <code>localStorage</code>, <code>sessionStorage</code>, or any other form of persistent browser-side storage</strong>. There is no Google Analytics, advertising pixels, tracking networks, or third-party scripts loaded from external CDNs.</p>
+        <p>The invitation code you type exists only in browser memory while the tab is open, and is gone when you close or reload it. The only JavaScript file external to the application logic (<code>marked.min.js</code>) is served locally from this server — no communication with any third party occurs.</p>
+      </div>
+
+      <!-- 9. Supervisory authority -->
+      <div class="policy-section">
+        <h2>9. Supervisory authority</h2>
+        <p>You have the right to lodge a complaint with the <strong>Agencia Española de Protección de Datos (AEPD)</strong>, Spain's data protection authority:</p>
+        <ul>
+          <li><strong>Website:</strong> <a href="https://www.aepd.es" target="_blank" rel="noopener">www.aepd.es</a></li>
+          <li><strong>Address:</strong> C/ Jorge Juan, 6, 28001 Madrid, Spain</li>
+          <li><strong>Online form:</strong> www.aepd.es → «Sede electrónica» → «Reclamaciones»</li>
+        </ul>
+        <p>We would also welcome direct contact at <a href="mailto:rufus@accordant.eu">rufus@accordant.eu</a> before escalating.</p>
+      </div>
+
+      <!-- 10. Changes -->
+      <div class="policy-section">
+        <h2>10. Changes to this policy</h2>
+        <p>Material changes will be communicated via a notice on the website and by updating the date above. Changes that affect the legal basis of processing or international transfers will require fresh consent where applicable. This policy is always available at <a href="/privacy">ran.accordant.eu/privacy</a>.</p>
+      </div>
+    </div><!-- end .show-en -->
+
+  </div><!-- end .policy-wrap -->
+
+  <footer>
+    <div class="footer-inner">
+      <p>
+        <span class="show-es">Rán es una herramienta de apoyo. No sustituye el consejo de un asesor fiscal.</span>
+        <span class="show-en">Rán is a support tool. It does not replace professional tax advice.</span>
+      </p>
+      <p class="footer-links">
+        <a href="/">
+          <span class="show-es">← Volver a Rán</span>
+          <span class="show-en">← Back to Rán</span>
+        </a>
+        <a href="https://accordant.eu" target="_blank" rel="noopener">Accordant</a>
+        <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">Anthropic data retention</a>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      const es = document.body.classList.toggle('lang-es');
+      document.body.classList.toggle('lang-en', !es);
+      document.documentElement.lang = es ? 'es' : 'en';
+    });
+  </script>
+
+</body>
+</html>
