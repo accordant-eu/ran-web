@@ -9,378 +9,400 @@
 </head>
 <body class="lang-es">
 
-  <header>
-    <div class="header-inner">
-      <div class="logo">Rán</div>
-      <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+  <nav>
+    <div class="nav-inner">
+      <span class="logo">Rán</span>
+      <button class="lang-btn" id="lang-toggle">
         <span class="show-es">EN</span>
         <span class="show-en">ES</span>
       </button>
     </div>
-    <p class="tagline">
-      <span class="show-es">Entiende tu declaración de la renta.</span>
-      <span class="show-en">Understand your Spanish tax return.</span>
-    </p>
-  </header>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>
+        <span class="show-es">Tu declaración de la renta, explicada en inglés claro.</span>
+        <span class="show-en">Your Spanish tax return, explained in plain English.</span>
+      </h1>
+      <p class="hero-sub">
+        <span class="show-es">Sube tu borrador del Modelo 100. Recibe una explicación completa: de dónde viene cada cifra, qué deducciones se aplican, y qué vale la pena revisar.</span>
+        <span class="show-en">Upload your Modelo 100 draft. Get a full plain-language breakdown: where every figure comes from, which deductions apply, and what's worth a second look.</span>
+      </p>
+      <div class="trust-pills">
+        <span class="pill">
+          <span class="show-es">🔒 Sin retención de datos</span>
+          <span class="show-en">🔒 Zero data retention</span>
+        </span>
+        <span class="pill">
+          <span class="show-es">📖 Código abierto</span>
+          <span class="show-en">📖 Open source</span>
+        </span>
+        <span class="pill">
+          <span class="show-es">⚡ Resultado en ~90 segundos</span>
+          <span class="show-en">⚡ Result in ~90 seconds</span>
+        </span>
+      </div>
+    </div>
+  </section>
 
   <main>
 
     <!-- ── Upload form ───────────────────────────────────────────────────── -->
-    <section id="upload-section">
-      <h1>
-        <span class="show-es">Sube tu borrador. Te explicamos qué significa.</span>
-        <span class="show-en">Upload your draft. We explain what it means.</span>
-      </h1>
+    <div class="form-layout" id="upload-section">
+      <div class="form-card">
+        <h2>
+          <span class="show-es">Sube tu borrador</span>
+          <span class="show-en">Upload your draft</span>
+        </h2>
+        <p class="form-sub">
+          <span class="show-es">Acepta Modelo 100 en PDF. Si sois dos declarantes en el hogar, puedes subir ambos borradores a la vez.</span>
+          <span class="show-en">Accepts Modelo 100 PDF. If you and a partner file separately, upload both drafts at once.</span>
+        </p>
 
-      <p class="intro">
-        <span class="show-es">
-          Introduce tu código de invitación y sube tu declaración (Modelo 100 borrador, PDF).
-          Si sois dos declarantes en el mismo hogar, puedes subir ambas a la vez.
-        </span>
-        <span class="show-en">
-          Enter your invite code and upload your tax return (Modelo 100 draft, PDF).
-          If you and a partner file separately, you can upload both at once.
-        </span>
-      </p>
+        <form id="ran-form">
+          <div class="field">
+            <label for="invite-code">
+              <span class="show-es">Código de invitación</span>
+              <span class="show-en">Invite code</span>
+            </label>
+            <input type="text" id="invite-code" name="invite_code"
+              placeholder="RENTA-XXXX" required autocomplete="off" spellcheck="false" />
+          </div>
 
-      <form id="ran-form">
-        <div class="field">
-          <label for="invite-code">
-            <span class="show-es">Código de invitación</span>
-            <span class="show-en">Invite code</span>
-          </label>
-          <input
-            type="text"
-            id="invite-code"
-            name="invite_code"
-            placeholder="RENTA-XXXX"
-            required
-            autocomplete="off"
-            spellcheck="false"
-          />
-        </div>
-
-        <div class="field">
-          <label for="pdfs">
-            <span class="show-es">Declaración(es) en PDF</span>
-            <span class="show-en">Tax return PDF(s)</span>
-            <span class="field-hint">
-              <span class="show-es">Máximo 2 archivos</span>
-              <span class="show-en">Max 2 files</span>
-            </span>
-          </label>
-          <div class="file-drop" id="file-drop">
-            <input
-              type="file"
-              id="pdfs"
-              name="pdfs"
-              accept=".pdf,application/pdf"
-              multiple
-              required
-            />
-            <div class="file-drop-label" id="file-drop-label">
-              <span class="show-es">Arrastra aquí o haz clic para seleccionar</span>
-              <span class="show-en">Drag here or click to select</span>
+          <div class="field">
+            <label>
+              <span class="show-es">Declaración(es) en PDF</span>
+              <span class="show-en">Tax return PDF(s)</span>
+              <span class="field-note">
+                <span class="show-es">Máximo 2</span>
+                <span class="show-en">Max 2</span>
+              </span>
+            </label>
+            <div class="drop-zone" id="drop-zone">
+              <input type="file" id="pdfs" name="pdfs" accept=".pdf,application/pdf" multiple required />
+              <div class="drop-inner" id="drop-inner">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                <p>
+                  <span class="show-es">Arrastra aquí o <span class="link">haz clic para seleccionar</span></span>
+                  <span class="show-en">Drag here or <span class="link">click to select</span></span>
+                </p>
+              </div>
+              <div class="drop-files" id="drop-files" hidden></div>
             </div>
           </div>
-          <div class="file-names" id="file-names"></div>
-        </div>
 
-        <button type="submit" id="submit-btn">
-          <span class="show-es">Analizar mi declaración →</span>
-          <span class="show-en">Analyse my return →</span>
-        </button>
-      </form>
+          <div class="error-box" id="error-box" hidden></div>
 
-      <div class="error-box" id="error-box" hidden></div>
-
-      <!-- Zero-retention note -->
-      <div class="trust-block">
-        <h3>
-          <span class="show-es">Retención cero — por diseño</span>
-          <span class="show-en">Zero retention — by design</span>
-        </h3>
-        <ul>
-          <li>
-            <span class="show-es">Los PDFs <strong>nunca se escriben en disco</strong>. Se procesan en memoria y se descartan inmediatamente.</span>
-            <span class="show-en">PDFs are <strong>never written to disk</strong>. Processed in memory and discarded immediately.</span>
-          </li>
-          <li>
-            <span class="show-es">El informe aparece en pantalla. Cuando cierras la pestaña, desaparece. No guardamos nada.</span>
-            <span class="show-en">The report appears on screen. When you close the tab, it's gone. We keep nothing.</span>
-          </li>
-          <li>
-            <span class="show-es">Sólo registramos: marca de tiempo, tamaño del archivo, código utilizado. Sin contenido, sin nombres.</span>
-            <span class="show-en">We only log: timestamp, file size, code used. No content, no names.</span>
-          </li>
-          <li>
-            <span class="show-es">La API de Anthropic no entrena modelos con datos enviados.
-              <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Política de datos →</a></span>
-            <span class="show-en">Anthropic's API does not train on submitted data.
-              <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Data policy →</a></span>
-          </li>
-          <li>
-            <span class="show-es">Código abierto y auditable.
-              <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">Ver en GitHub →</a></span>
-            <span class="show-en">Open-source and auditable.
-              <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">View on GitHub →</a></span>
-          </li>
-        </ul>
+          <button type="submit" id="submit-btn">
+            <span class="show-es">Analizar mi declaración</span>
+            <span class="show-en">Analyse my return</span>
+            <span class="btn-arrow">→</span>
+          </button>
+        </form>
       </div>
-    </section>
+
+      <!-- Trust sidebar -->
+      <div class="trust-sidebar">
+        <div class="trust-card">
+          <h3>
+            <span class="show-es">Retención cero — garantizado por arquitectura</span>
+            <span class="show-en">Zero retention — guaranteed by architecture</span>
+          </h3>
+          <ul class="trust-list">
+            <li>
+              <span class="trust-icon">🗑️</span>
+              <div>
+                <strong>
+                  <span class="show-es">Los PDFs nunca se escriben en disco</span>
+                  <span class="show-en">PDFs never touch disk</span>
+                </strong>
+                <p>
+                  <span class="show-es">Se procesan en memoria (<code>BytesIO</code>) y se descartan al finalizar la petición.</span>
+                  <span class="show-en">Processed in memory (<code>BytesIO</code>) and discarded when the request ends.</span>
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="trust-icon">🖥️</span>
+              <div>
+                <strong>
+                  <span class="show-es">El informe aparece en pantalla</span>
+                  <span class="show-en">The report lives on screen</span>
+                </strong>
+                <p>
+                  <span class="show-es">Nunca se almacena. Cierra la pestaña y desaparece.</span>
+                  <span class="show-en">Never stored. Close the tab and it's gone.</span>
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="trust-icon">📋</span>
+              <div>
+                <strong>
+                  <span class="show-es">Sólo registramos metadatos</span>
+                  <span class="show-en">We only log metadata</span>
+                </strong>
+                <p>
+                  <span class="show-es">Marca de tiempo, tamaño del archivo, código usado. Sin contenido, sin nombres.</span>
+                  <span class="show-en">Timestamp, file size, code used. No content, no names.</span>
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="trust-icon">🤖</span>
+              <div>
+                <strong>
+                  <span class="show-es">API de Anthropic</span>
+                  <span class="show-en">Anthropic API</span>
+                </strong>
+                <p>
+                  <span class="show-es">No usa datos enviados para entrenar modelos. <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Política de datos →</a></span>
+                  <span class="show-en">Does not train on submitted data. <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Data policy →</a></span>
+                </p>
+              </div>
+            </li>
+            <li>
+              <span class="trust-icon">👁️</span>
+              <div>
+                <strong>
+                  <span class="show-es">Código abierto y auditable</span>
+                  <span class="show-en">Open-source and auditable</span>
+                </strong>
+                <p>
+                  <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">github.com/accordant-eu/ran-web →</a>
+                </p>
+              </div>
+            </li>
+          </ul>
+          <p class="trust-note">
+            <span class="show-es">"No hay nada en lo que iniciar sesión. No hay nada a lo que volver. Lo ejecutas, lo ves, lo olvidamos."</span>
+            <span class="show-en">"There's nothing to log in to. Nothing to come back to. You run it, you see it, we forget it."</span>
+          </p>
+        </div>
+      </div>
+    </div>
 
     <!-- ── Processing ────────────────────────────────────────────────────── -->
-    <section id="processing-section" hidden>
-      <div class="processing-inner">
-        <div class="progress-bar-track">
-          <div class="progress-bar-fill" id="progress-bar"></div>
+    <div class="state-screen" id="processing-section" hidden>
+      <div class="state-inner">
+        <div class="progress-wrap">
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
-        <p id="processing-label">
+        <p class="state-label">
           <span class="show-es">Analizando tu declaración…</span>
           <span class="show-en">Analysing your return…</span>
         </p>
       </div>
-    </section>
+    </div>
 
     <!-- ── Report ────────────────────────────────────────────────────────── -->
-    <section id="report-section" hidden>
-
-      <div class="report-toolbar">
-        <h2>
-          <span class="show-es">Tu informe</span>
-          <span class="show-en">Your report</span>
-        </h2>
-        <div class="toolbar-actions">
-          <button class="btn-secondary" id="print-btn" onclick="window.print()">
-            <span class="show-es">🖨 Imprimir / Guardar PDF</span>
-            <span class="show-en">🖨 Print / Save as PDF</span>
-          </button>
+    <div id="report-section" hidden>
+      <div class="report-header">
+        <div>
+          <h2>
+            <span class="show-es">Tu informe</span>
+            <span class="show-en">Your report</span>
+          </h2>
+          <p class="report-subhead">
+            <span class="show-es">Borrador no validado — las cifras pueden cambiar antes de la presentación.</span>
+            <span class="show-en">Unvalidated draft — figures may change before filing.</span>
+          </p>
         </div>
-      </div>
-
-      <div class="report-draft-notice">
-        <strong>
-          <span class="show-es">⚠️ Borrador no validado</span>
-          <span class="show-en">⚠️ Unvalidated draft</span>
-        </strong>
-        <span class="show-es"> — Estos documentos están marcados SIN VALIDAR. Los datos pueden cambiar antes de la presentación.</span>
-        <span class="show-en"> — These documents are marked SIN VALIDAR (not validated). Figures may change before filing.</span>
+        <button class="btn-outline" onclick="window.print()">
+          <span class="show-es">🖨 Guardar PDF</span>
+          <span class="show-en">🖨 Save as PDF</span>
+        </button>
       </div>
 
       <div class="report-body" id="report-body"></div>
 
-      <div class="streaming-indicator" id="streaming-indicator">
-        <span class="dot-pulse"></span>
-        <span class="show-es">Generando…</span>
-        <span class="show-en">Generating…</span>
+      <div class="streaming-bar" id="streaming-bar">
+        <span class="pulse-dot"></span>
+        <span class="show-es">Generando informe…</span>
+        <span class="show-en">Generating report…</span>
       </div>
 
-      <!-- Invite codes -->
-      <div class="codes-section" id="codes-section" hidden>
-        <h3>
-          <span class="show-es">Tus 5 códigos de invitación</span>
-          <span class="show-en">Your 5 invite codes</span>
-        </h3>
-        <p>
-          <span class="show-es">Comparte estos códigos con quien quieras — un amigo, tu gestor, un colega expatriado. Cada código es de un solo uso.</span>
-          <span class="show-en">Share with anyone — a friend, your accountant, a fellow expat. Each code is single-use.</span>
-        </p>
-        <ul class="code-list" id="code-list"></ul>
-        <p class="codes-save-note">
-          <span class="show-es">⚠️ Guárdalos ahora. Al cerrar esta pestaña, desaparecen.</span>
-          <span class="show-en">⚠️ Save them now. They're gone when you close this tab.</span>
-        </p>
+      <div class="codes-block" id="codes-section" hidden>
+        <div class="codes-header">
+          <h3>
+            <span class="show-es">Tus 5 códigos de invitación</span>
+            <span class="show-en">Your 5 invite codes</span>
+          </h3>
+          <p>
+            <span class="show-es">Comparte uno con tu gestor, tu pareja, o un colega expatriado. Cada código es de un solo uso. <strong>Guárdalos ahora — desaparecen al cerrar esta pestaña.</strong></span>
+            <span class="show-en">Share one with your accountant, partner, or a fellow expat. Each code is single-use. <strong>Save them now — they disappear when you close this tab.</strong></span>
+          </p>
+        </div>
+        <ul class="code-chips" id="code-list"></ul>
       </div>
 
-      <div class="report-footer-note">
-        <span class="show-es">Este informe es sólo orientativo. No sustituye el consejo de un asesor fiscal. Cierra la pestaña y desaparece — no hemos guardado nada.</span>
-        <span class="show-en">This report is for guidance only. It is not a substitute for professional tax advice. Close this tab and it's gone — we kept nothing.</span>
-      </div>
-    </section>
+      <p class="report-close-note">
+        <span class="show-es">⚠️ Cierra esta pestaña y el informe desaparece. No hemos guardado nada.</span>
+        <span class="show-en">⚠️ Close this tab and this report is gone. We kept nothing.</span>
+      </p>
+    </div>
 
   </main>
 
   <footer>
-    <p>
-      <span class="show-es">Rán es una herramienta de apoyo, no un sustituto de un asesor fiscal.</span>
-      <span class="show-en">Rán is a support tool, not a replacement for a tax advisor.</span>
-    </p>
-    <p>
-      <a href="https://accordant.eu" target="_blank" rel="noopener">Accordant</a> ·
-      <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">
-        <span class="show-es">Código fuente</span>
-        <span class="show-en">Source code</span>
-      </a> ·
-      <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Anthropic API</a>
-    </p>
+    <div class="footer-inner">
+      <p>
+        <span class="show-es">Rán es una herramienta de apoyo. No sustituye el consejo de un asesor fiscal.</span>
+        <span class="show-en">Rán is a support tool. It does not replace professional tax advice.</span>
+      </p>
+      <p class="footer-links">
+        <a href="https://accordant.eu" target="_blank" rel="noopener">Accordant</a>
+        <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Anthropic API policy</a>
+      </p>
+    </div>
   </footer>
 
   <script>
-    // ── Language toggle ──────────────────────────────────────────────────────
-    const langToggle = document.getElementById('lang-toggle');
-    langToggle.addEventListener('click', () => {
-      const isEs = document.body.classList.contains('lang-es');
-      document.body.classList.toggle('lang-es', !isEs);
-      document.body.classList.toggle('lang-en', isEs);
-      document.documentElement.lang = isEs ? 'en' : 'es';
+    // ── Language ─────────────────────────────────────────────────────────────
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      const es = document.body.classList.toggle('lang-es');
+      document.body.classList.toggle('lang-en', !es);
+      document.documentElement.lang = es ? 'es' : 'en';
     });
 
-    // ── File input ───────────────────────────────────────────────────────────
+    // ── File drop ────────────────────────────────────────────────────────────
     const fileInput = document.getElementById('pdfs');
-    const fileNames = document.getElementById('file-names');
-    const fileDrop  = document.getElementById('file-drop');
+    const dropZone  = document.getElementById('drop-zone');
+    const dropFiles = document.getElementById('drop-files');
+    const dropInner = document.getElementById('drop-inner');
 
-    fileInput.addEventListener('change', updateFileNames);
+    fileInput.addEventListener('change', showFiles);
+    ['dragover','dragenter'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('over'); }));
+    ['dragleave','drop'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('over'); }));
+    dropZone.addEventListener('drop', ev => { fileInput.files = ev.dataTransfer.files; showFiles(); });
 
-    ['dragover','dragenter'].forEach(ev => fileDrop.addEventListener(ev, e => {
-      e.preventDefault(); fileDrop.classList.add('dragging');
-    }));
-    ['dragleave','drop'].forEach(ev => fileDrop.addEventListener(ev, e => {
-      e.preventDefault(); fileDrop.classList.remove('dragging');
-    }));
-    fileDrop.addEventListener('drop', e => {
-      fileInput.files = e.dataTransfer.files;
-      updateFileNames();
-    });
-
-    function updateFileNames() {
+    function showFiles() {
       const names = Array.from(fileInput.files).map(f => f.name);
-      fileNames.textContent = names.join('  ·  ');
-      fileNames.style.display = names.length ? 'block' : 'none';
+      if (!names.length) return;
+      dropInner.hidden = true;
+      dropFiles.hidden = false;
+      dropFiles.innerHTML = names.map(n => `<span class="file-chip">📄 ${n}</span>`).join('');
+    }
+
+    // ── Marked config ────────────────────────────────────────────────────────
+    marked.use({ gfm: true, breaks: false });
+
+    // ── State machine ────────────────────────────────────────────────────────
+    const $ = id => document.getElementById(id);
+    const uploadSection    = $('upload-section');
+    const processingSection= $('processing-section');
+    const reportSection    = $('report-section');
+    const reportBody       = $('report-body');
+    const streamingBar     = $('streaming-bar');
+    const codesSection     = $('codes-section');
+    const codeList         = $('code-list');
+    const errorBox         = $('error-box');
+    const progressFill     = $('progress-fill');
+
+    function setState(state) {
+      uploadSection.hidden     = state !== 'upload';
+      processingSection.hidden = state !== 'processing';
+      reportSection.hidden     = state !== 'report';
+    }
+
+    // ── Progress bar ─────────────────────────────────────────────────────────
+    let progressTimer, pval = 0;
+    function startProgress() {
+      pval = 0; progressFill.style.transition = 'none'; progressFill.style.width = '0%';
+      progressTimer = setInterval(() => { pval += (85 - pval) * 0.05; progressFill.style.width = pval + '%'; }, 250);
+    }
+    function doneProgress() {
+      clearInterval(progressTimer);
+      progressFill.style.transition = 'width 0.4s ease';
+      progressFill.style.width = '100%';
     }
 
     // ── Form submit ──────────────────────────────────────────────────────────
-    const form             = document.getElementById('ran-form');
-    const uploadSection    = document.getElementById('upload-section');
-    const processingSection= document.getElementById('processing-section');
-    const reportSection    = document.getElementById('report-section');
-    const reportBody       = document.getElementById('report-body');
-    const streamingIndicator = document.getElementById('streaming-indicator');
-    const codesSection     = document.getElementById('codes-section');
-    const codeList         = document.getElementById('code-list');
-    const errorBox         = document.getElementById('error-box');
-    const progressBar      = document.getElementById('progress-bar');
-
-    // Configure marked
-    marked.setOptions({ gfm: true, breaks: true });
-
-    form.addEventListener('submit', async (e) => {
+    $('ran-form').addEventListener('submit', async e => {
       e.preventDefault();
       errorBox.hidden = true;
 
-      const code  = document.getElementById('invite-code').value.trim().toUpperCase();
+      const code  = $('invite-code').value.trim().toUpperCase();
       const files = fileInput.files;
 
-      if (!code)          return showError('Introduce un código de invitación. / Enter an invite code.');
-      if (!files.length)  return showError('Selecciona al menos un PDF. / Select at least one PDF.');
-      if (files.length>2) return showError('Máximo 2 PDFs. / Maximum 2 PDFs.');
+      if (!code)          return showError('Introduce un código. / Enter a code.');
+      if (!files.length)  return showError('Selecciona un PDF. / Select a PDF.');
+      if (files.length>2) return showError('Máximo 2 PDFs. / Max 2 PDFs.');
 
-      // Show processing
-      uploadSection.hidden    = true;
-      processingSection.hidden = false;
-      animateProgress();
+      setState('processing');
+      startProgress();
 
-      const formData = new FormData();
-      formData.append('invite_code', code);
-      for (const file of files) formData.append('pdfs', file);
+      const fd = new FormData();
+      fd.append('invite_code', code);
+      for (const f of files) fd.append('pdfs', f);
 
       try {
-        const response = await fetch('/process', { method: 'POST', body: formData });
+        const res = await fetch('/process', { method: 'POST', body: fd });
 
-        if (!response.ok) {
-          let detail = 'Error desconocido / Unknown error';
-          try { const err = await response.json(); detail = err.detail || detail; } catch(_) {}
-          throw new Error(detail);
+        if (!res.ok) {
+          let msg = 'Error desconocido / Unknown error';
+          try { msg = (await res.json()).detail || msg; } catch(_) {}
+          throw new Error(msg);
         }
 
-        // Switch to report view — streaming starts now
-        processingSection.hidden = false; // keep visible briefly
-        reportSection.hidden = false;
-        streamingIndicator.hidden = false;
-        stopProgress();
+        // Switch to report — streaming starts
+        doneProgress();
+        setTimeout(() => {
+          setState('report');
+          streamingBar.hidden = false;
+        }, 400);
 
-        // Stream the response
-        const reader  = response.body.getReader();
+        const reader  = res.body.getReader();
         const decoder = new TextDecoder();
-        let buffer = '';
-        let codesFound = false;
+        let buf = '', codesFound = false;
 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
 
-          buffer += decoder.decode(value, { stream: true });
+          buf += decoder.decode(value, { stream: true });
 
-          const marker    = '__CODES__:';
-          const markerIdx = buffer.indexOf(marker);
+          const MARK = '__CODES__:';
+          const idx  = buf.indexOf(MARK);
 
-          if (markerIdx !== -1 && !codesFound) {
-            const reportText = buffer.substring(0, markerIdx);
-            reportBody.innerHTML = marked.parse(reportText);
-            const codesStr = buffer.substring(markerIdx + marker.length).trim();
+          if (idx !== -1 && !codesFound) {
+            reportBody.innerHTML = marked.parse(buf.slice(0, idx));
             try {
-              renderCodes(JSON.parse(codesStr));
+              renderCodes(JSON.parse(buf.slice(idx + MARK.length).trim()));
               codesFound = true;
-            } catch(_) { /* still streaming */ }
+            } catch(_) {}
           } else if (!codesFound) {
-            reportBody.innerHTML = marked.parse(buffer);
+            reportBody.innerHTML = marked.parse(buf);
           }
-
-          // Smooth scroll to bottom as report fills in
-          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
-        // Done
-        processingSection.hidden = true;
-        streamingIndicator.hidden = true;
+        streamingBar.hidden = true;
 
-      } catch (err) {
-        processingSection.hidden = true;
-        reportSection.hidden     = true;
-        uploadSection.hidden     = false;
-        showError(err.message || 'Error al procesar. / Processing error.');
+      } catch(err) {
+        setState('upload');
+        showError(err.message);
       }
     });
 
-    // Progress bar animation (indeterminate during wait, stops when streaming starts)
-    let progressInterval;
-    let progressValue = 0;
-    function animateProgress() {
-      progressValue = 0;
-      progressBar.style.width = '0%';
-      progressInterval = setInterval(() => {
-        // Ease toward 85% — never reaches 100% until streaming completes
-        const remaining = 85 - progressValue;
-        progressValue  += remaining * 0.04;
-        progressBar.style.width = progressValue + '%';
-      }, 200);
-    }
-    function stopProgress() {
-      clearInterval(progressInterval);
-      progressBar.style.width = '100%';
-      progressBar.style.transition = 'width 0.3s ease';
-    }
-
     function renderCodes(codes) {
-      codeList.innerHTML = '';
-      codes.forEach(code => {
-        const li = document.createElement('li');
-        li.className = 'code-chip';
-        li.textContent = code;
-        li.title = 'Click to copy / Clic para copiar';
-        li.addEventListener('click', () => {
-          navigator.clipboard.writeText(code).then(() => {
-            li.classList.add('copied');
-            setTimeout(() => li.classList.remove('copied'), 1500);
-          });
-        });
-        codeList.appendChild(li);
-      });
+      codeList.innerHTML = codes.map(c =>
+        `<li class="chip" title="Click to copy" onclick="copyCode(this,'${c}')">${c}</li>`
+      ).join('');
       codesSection.hidden = false;
     }
 
-    function showError(message) {
-      errorBox.textContent = message;
+    function copyCode(el, code) {
+      navigator.clipboard.writeText(code).then(() => {
+        el.classList.add('copied');
+        setTimeout(() => el.classList.remove('copied'), 1500);
+      });
+    }
+
+    function showError(msg) {
+      errorBox.textContent = msg;
       errorBox.hidden = false;
     }
   </script>
