@@ -249,7 +249,7 @@
 
       <div class="report-body" id="report-body"></div>
 
-      <div class="streaming-bar" id="streaming-bar">
+      <div class="streaming-bar" id="streaming-bar" hidden>
         <span class="pulse-dot"></span>
         <span class="show-es">Generando informe…</span>
         <span class="show-en">Generating report…</span>
@@ -455,6 +455,7 @@
 
       const fd = new FormData();
       fd.append('invite_code', code);
+      fd.append('language', document.getElementById('lang-field').value || 'es');
       for (const f of files) fd.append('pdfs', f);
 
       try {
@@ -468,10 +469,8 @@
 
         // Switch to report — streaming starts
         doneProgress();
-        setTimeout(() => {
-          setState('report');
-          streamingBar.hidden = false;
-        }, 400);
+        streamingBar.hidden = false;
+        setTimeout(() => setState('report'), 400);
 
         const reader  = res.body.getReader();
         const decoder = new TextDecoder();
