@@ -33,6 +33,10 @@ from fastapi.responses import StreamingResponse
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
+
+# Cost per token in USD (claude-sonnet-4-6 as of 2026-06-14)
+COST_PER_INPUT_TOKEN  = 3.00 / 1_000_000   # $3.00 / MTok
+COST_PER_OUTPUT_TOKEN = 15.00 / 1_000_000  # $15.00 / MTok
 INVITE_CODES_FILE = os.environ.get("INVITE_CODES_FILE", "codes.txt")
 OPS_LOG_FILE = os.environ.get("OPS_LOG_FILE", "ops_log.jsonl")
 MAX_CODE_USES = int(os.environ.get("MAX_CODE_USES", "10"))  # uses per code
@@ -212,10 +216,12 @@ def stream_claude_response(
     system_prompt: str,
     user_message: str,
     new_codes: list[str],
+    usage_out: dict | None = None,
 ) -> Generator[str, None, None]:
     """
     Call the Anthropic API and stream the response back as server-sent events.
     Appends the new invite codes at the end of the stream.
+    Populates usage_out with input_tokens, output_tokens, cost_usd if provided.
     """
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
@@ -227,6 +233,19 @@ def stream_claude_response(
     ) as stream:
         for text_chunk in stream.text_stream:
             yield text_chunk
+        # Capture token usage after stream completes
+        if usage_out is not None:
+            try:
+                msg = stream.get_final_message()
+                usage_out["input_tokens"]  = msg.usage.input_tokens
+                usage_out["output_tokens"] = msg.usage.output_tokens
+                usage_out["cost_usd"] = round(
+                    msg.usage.input_tokens  * COST_PER_INPUT_TOKEN +
+                    msg.usage.output_tokens * COST_PER_OUTPUT_TOKEN,
+                    6,
+                )
+            except Exception:
+                pass  # usage tracking is non-critical
 
     # After the report, append the new invite codes as structured JSON
     # so the frontend can render them separately.
@@ -327,20 +346,24 @@ async def process(
     # --- Stream the response ---
     def response_generator():
         start_ms = datetime.now(timezone.utc).timestamp() * 1000
+        usage: dict = {}
         try:
-            yield from stream_claude_response(system_prompt, user_message, new_codes)
+            yield from stream_claude_response(system_prompt, user_message, new_codes, usage_out=usage)
         finally:
             end_ms = datetime.now(timezone.utc).timestamp() * 1000
             # Append ops log entry — metadata only, no document content
-            append_ops_log(
-                {
-                    "ts": start_ts,
-                    "code_used": invite_code,
-                    "returns_uploaded": len(pdfs),
-                    "file_size_bytes": total_bytes,
-                    "response_time_ms": round(end_ms - start_ms),
-                    "completed": True,
-                }
-            )
+            entry = {
+                "ts": start_ts,
+                "code_used": invite_code,
+                "returns_uploaded": len(pdfs),
+                "file_size_bytes": total_bytes,
+                "response_time_ms": round(end_ms - start_ms),
+                "completed": True,
+            }
+            if usage:
+                entry["input_tokens"]  = usage.get("input_tokens")
+                entry["output_tokens"] = usage.get("output_tokens")
+                entry["cost_usd"]      = usage.get("cost_usd")
+            append_ops_log(entry)
 
     return StreamingResponse(response_generator(), media_type="text/plain")
