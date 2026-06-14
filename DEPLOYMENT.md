@@ -139,3 +139,16 @@ To check how many valid codes remain:
 ```bash
 grep -v "^USED:" /srv/ran-web/data/codes.txt | grep -v "^$" | wc -l
 ```
+
+## File permissions
+
+The Docker container runs as a non-root `ran` user (uid 1000). The bind-mounted
+`data/` and `prompts/` directories must be owned by uid 1000 and writable:
+
+```bash
+chown -R 1000:1000 /srv/ran-web/data /srv/ran-web/prompts
+chmod 664 /srv/ran-web/data/codes.txt
+chmod 664 /srv/ran-web/data/ops_log.jsonl 2>/dev/null || true
+```
+
+Run this once after creating the directories on a fresh deploy.
