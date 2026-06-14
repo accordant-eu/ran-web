@@ -11,6 +11,11 @@ cd "$REPO_DIR"
 echo "=== Rán deploy $(date -u +%Y-%m-%dT%H:%M:%SZ) ==="
 
 # ── 1. Pull ──────────────────────────────────────────────────────────────────
+# Reset the version stamp from the previous deploy before pulling
+# (stamping dirties index.html; we never commit that change)
+echo "→ resetting version stamp"
+git checkout -- frontend/index.html
+
 echo "→ git pull"
 git pull
 
