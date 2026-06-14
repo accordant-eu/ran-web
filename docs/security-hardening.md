@@ -2,6 +2,19 @@
 
 Last updated: 2026-06-14. Based on a full adversarial security audit of the codebase.
 
+## Status
+
+| Category | Items | Status |
+|---|---|---|
+| Critical (C-1–C-4) | CORS, API docs, race condition, oracle | ✅ All fixed |
+| High (H-1–H-5) | Validation, locking, timeout, logging, CSPRNG | ✅ All fixed |
+| Medium (M-1–M-5) | Headers, nginx version, prompt injection, file perms, TLS | ✅ All fixed |
+| Medium (M-6) | Egress restriction | ⚠️ Partial — named network created; iptables pending manual decision |
+| Low (L-1–L-5) | Input limits, language allowlist, SRI, health response, rootfs | ✅ All fixed |
+| CSP `unsafe-inline` | Inline scripts and onclick handlers | ✅ Removed — strict `script-src 'self'` |
+
+36/36 tests passing. All changes committed and pushed. CI green.
+
 ---
 
 ## What was implemented (all automatic, in code)

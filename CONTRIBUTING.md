@@ -50,3 +50,50 @@ chore(docker): add .dockerignore
 pip install -r backend/requirements.txt pytest httpx
 pytest tests/ -v
 ```
+
+## CI pipeline
+
+Every push to `main` runs three jobs via GitHub Actions (`.github/workflows/ci.yml`):
+
+| Job | What it does |
+|---|---|
+| **Lint + Test** | `ruff check backend/main.py` + `pytest tests/ -v --tb=short` |
+| **Docker build check** | `docker build` — catches dependency/Dockerfile issues early |
+| **Secrets scan** | `gitleaks detect` scans the diff for accidentally committed secrets |
+
+**CI must be green before a change is considered done.** Check the Actions tab after every push.
+
+### Known CI quirks and fixes
+
+**gitleaks requires standalone install for org repos**  
+`gitleaks/gitleaks-action@v2` requires a paid license for GitHub organisations. We install
+the binary directly from the release and run it in standalone mode. Do not revert to the
+action — it will fail immediately with a license error.
+
+**Test fixtures must redirect `tempfile.tempdir` to `tmp_path`**  
+Any test that calls `tempfile.gettempdir()` or `scan_for_pdf_magic(tempfile.gettempdir())`
+will hang on CI runners: `/tmp` accumulates thousands of files from tooling and the scan
+times out. Both `tmp_env` fixtures monkeypatch `tempfile.tempdir` → `tmp_path` so the scan
+covers only the isolated test directory. Do not remove this — the test will silently pass
+locally but time out and be killed in CI.
+
+**Module-level constants are cached across tests**  
+`main.py` reads `INVITE_CODES_FILE`, `OPS_LOG_FILE`, and `CODE_LOCK_FILE` once at import
+time. Tests that import `main` without first deleting `sys.modules["main"]` will use stale
+paths from a previous test's environment. Both `tmp_env` fixtures handle this: they delete
+the cached module, re-import, and then `monkeypatch.setattr` the constants directly.
+
+**Stuck in-progress runs block the queue**  
+GitHub Actions has no automatic timeout on runs for this repo. If you see new pushes stuck
+in `queued` state, check for runs stuck in `in_progress` from earlier:
+```bash
+gh api "/repos/accordant-eu/ran-web/actions/runs?status=in_progress" --jq '.workflow_runs[].id' \
+  | xargs -I{} gh api -X POST /repos/accordant-eu/ran-web/actions/runs/{}/cancel
+```
+
+### Node.js version notice
+
+`actions/checkout@v4` and `actions/setup-python@v5` run on Node.js 20, which is deprecated
+as of June 2026. They will be forced to Node.js 24 after **16 June 2026**. Upgrade to `@v5`
+(checkout) and `@v6` (setup-python) when those versions stabilise — or set
+`FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` in the workflow env.
