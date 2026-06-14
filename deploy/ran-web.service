@@ -1,0 +1,36 @@
+[Unit]
+Description=Rán — IRPF explainer backend (FastAPI / uvicorn)
+Documentation=https://github.com/accordant-eu/ran-web
+After=network.target
+
+[Service]
+Type=simple
+User=ran
+Group=ran
+WorkingDirectory=/srv/ran-web/backend
+
+# Load environment variables from .env file
+# .env is NOT committed to the repo — create it on the server from .env.example
+EnvironmentFile=/srv/ran-web/backend/.env
+
+# Start uvicorn
+ExecStart=/srv/ran-web/venv/bin/uvicorn main:app \
+    --host 127.0.0.1 \
+    --port 8001 \
+    --workers 2 \
+    --log-level info \
+    --access-log
+
+# Restart on failure
+Restart=on-failure
+RestartSec=5
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/srv/ran-web/backend
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

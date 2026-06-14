@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rán — Entiende tu declaración de la renta / Understand your tax return</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── Header ──────────────────────────────────────────────────────────── -->
+  <header>
+    <div class="logo">Rán</div>
+    <p class="tagline">
+      Entiende tu declaración de la renta.<br />
+      <span class="en">Understand your Spanish tax return.</span>
+    </p>
+  </header>
+
+  <!-- ─── Main ────────────────────────────────────────────────────────────── -->
+  <main>
+
+    <!-- Upload form -->
+    <section class="upload-section" id="upload-section">
+      <h1>
+        Sube tu borrador. Te explicamos qué significa.
+        <span class="en">Upload your draft. We explain what it means.</span>
+      </h1>
+
+      <p class="intro">
+        Introduce tu código de invitación y sube tu declaración (Modelo 100 borrador en PDF).
+        Si sois dos declarantes en el mismo hogar, puedes subir ambas a la vez.
+        <br /><br />
+        <span class="en">
+          Enter your invite code and upload your tax return (Modelo 100 draft, PDF).
+          If you and a partner file separately, you can upload both at once.
+        </span>
+      </p>
+
+      <form id="ran-form">
+        <div class="field">
+          <label for="invite-code">
+            Código de invitación / <span class="en">Invite code</span>
+          </label>
+          <input
+            type="text"
+            id="invite-code"
+            name="invite_code"
+            placeholder="RENTA-XXXX"
+            required
+            autocomplete="off"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="field">
+          <label for="pdfs">
+            Declaración(es) en PDF
+            <span class="en">/ Tax return PDF(s)</span>
+            <span class="hint">Máximo 2 archivos / Max 2 files</span>
+          </label>
+          <input
+            type="file"
+            id="pdfs"
+            name="pdfs"
+            accept=".pdf,application/pdf"
+            multiple
+            required
+          />
+          <span class="file-hint" id="file-hint"></span>
+        </div>
+
+        <button type="submit" id="submit-btn">
+          Analizar mi declaración
+          <span class="en">/ Analyse my return</span>
+        </button>
+      </form>
+
+      <div class="error-box" id="error-box" hidden></div>
+    </section>
+
+    <!-- Processing indicator -->
+    <section class="processing-section" id="processing-section" hidden>
+      <div class="spinner"></div>
+      <p>
+        Procesando tu declaración… esto puede tardar unos segundos.
+        <br />
+        <span class="en">Processing your return… this may take a few seconds.</span>
+      </p>
+    </section>
+
+    <!-- Report output -->
+    <section class="report-section" id="report-section" hidden>
+      <h2>
+        Tu informe / <span class="en">Your report</span>
+      </h2>
+      <div class="report-body" id="report-body"></div>
+
+      <!-- Invite codes shown after report -->
+      <div class="codes-section" id="codes-section" hidden>
+        <h3>
+          Tus 5 códigos de invitación / <span class="en">Your 5 invite codes</span>
+        </h3>
+        <p>
+          Comparte estos códigos con quien quieras — un amigo, tu gestor, un colega expatriado.
+          Cada código es de un solo uso.
+          <br />
+          <span class="en">
+            Share these with anyone — a friend, your accountant, a fellow expat.
+            Each code is single-use.
+          </span>
+        </p>
+        <ul class="code-list" id="code-list"></ul>
+        <p class="codes-note">
+          Guárdalos ahora. Cuando cierres esta pestaña, han desaparecido.
+          <br />
+          <span class="en">Save them now. When you close this tab, they're gone.</span>
+        </p>
+      </div>
+
+      <div class="reset-bar">
+        <p class="gone-note">
+          Cierra esta pestaña y el informe desaparece. No hemos guardado nada.
+          <br />
+          <span class="en">Close this tab and the report is gone. We kept nothing.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- ─── How it works ──────────────────────────────────────────────────── -->
+    <section class="how-section">
+      <h2>
+        Cómo funciona / <span class="en">How it works</span>
+      </h2>
+
+      <div class="flow">
+        <div class="flow-step">
+          <div class="step-icon">📄</div>
+          <div class="step-label">
+            Subes el PDF<br />
+            <span class="en">You upload the PDF</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">🧠</div>
+          <div class="step-label">
+            Procesado en memoria<br />
+            <span class="en">Processed in memory</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">🤖</div>
+          <div class="step-label">
+            Claude API<br />
+            <span class="en">Claude API</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-icon">🖥️</div>
+          <div class="step-label">
+            Aparece en pantalla<br />
+            <span class="en">Appears on screen</span>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step gone">
+          <div class="step-icon">🗑️</div>
+          <div class="step-label">
+            Cierra la pestaña → desaparece<br />
+            <span class="en">Close tab → gone</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="retention-note">
+        <h3>
+          Retención cero — por diseño
+          <span class="en">/ Zero retention — by design</span>
+        </h3>
+        <ul>
+          <li>
+            Los PDFs <strong>nunca se escriben en disco</strong>. Se procesan en memoria (<code>BytesIO</code>) y se descartan al final de la petición.
+            <span class="en">PDFs are <strong>never written to disk</strong>. Processed in memory and discarded.</span>
+          </li>
+          <li>
+            El informe se muestra en pantalla y nunca se almacena.
+            <span class="en">The report is shown on screen and never stored.</span>
+          </li>
+          <li>
+            El único registro operacional: marca de tiempo, tamaño del archivo, código utilizado. Sin contenido, sin nombres.
+            <span class="en">The only operational record: timestamp, file size, code used. No content, no names.</span>
+          </li>
+          <li>
+            La API de Anthropic no usa los datos enviados para entrenar modelos.
+            <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Política de datos de Anthropic →</a>
+            <span class="en">Anthropic's API does not use submitted data for model training.
+            <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Anthropic data policy →</a></span>
+          </li>
+          <li>
+            El código es abierto y auditable.
+            <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">github.com/accordant-eu/ran-web →</a>
+            <span class="en">The code is open-source and auditable.</span>
+          </li>
+        </ul>
+        <p class="honest-note">
+          "No hay nada en lo que iniciar sesión. No hay nada a lo que volver. Lo ejecutas, lo ves, lo olvidamos."
+          <br />
+          <span class="en">"There's nothing to log in to. There's nothing to come back to. You run it, you see it, we forget it."</span>
+        </p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ─── Footer ──────────────────────────────────────────────────────────── -->
+  <footer>
+    <p>
+      Rán es una herramienta de apoyo, no un sustituto de un asesor fiscal.
+      <span class="en">Rán is a support tool, not a replacement for a tax advisor.</span>
+    </p>
+    <p>
+      <a href="https://accordant.eu" target="_blank" rel="noopener">Accordant</a> ·
+      <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">Código fuente / Source</a> ·
+      <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Política API Anthropic</a>
+    </p>
+  </footer>
+
+  <!-- ─── Script ───────────────────────────────────────────────────────────── -->
+  <script>
+    // Pure vanilla JS — no frameworks, no external dependencies.
+
+    const BACKEND_URL = ''; // Empty = same origin. For local dev, set to 'http://127.0.0.1:8000'
+
+    const form = document.getElementById('ran-form');
+    const uploadSection = document.getElementById('upload-section');
+    const processingSection = document.getElementById('processing-section');
+    const reportSection = document.getElementById('report-section');
+    const reportBody = document.getElementById('report-body');
+    const codesSection = document.getElementById('codes-section');
+    const codeList = document.getElementById('code-list');
+    const errorBox = document.getElementById('error-box');
+    const fileInput = document.getElementById('pdfs');
+    const fileHint = document.getElementById('file-hint');
+
+    // Show selected file names
+    fileInput.addEventListener('change', () => {
+      const files = Array.from(fileInput.files).map(f => f.name);
+      fileHint.textContent = files.length > 0 ? files.join(', ') : '';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorBox.hidden = true;
+
+      const code = document.getElementById('invite-code').value.trim().toUpperCase();
+      const files = fileInput.files;
+
+      if (!code) { showError('Introduce un código de invitación. / Enter an invite code.'); return; }
+      if (files.length === 0) { showError('Selecciona al menos un PDF. / Select at least one PDF.'); return; }
+      if (files.length > 2) { showError('Máximo 2 PDFs. / Maximum 2 PDFs.'); return; }
+
+      // Show processing state
+      uploadSection.hidden = true;
+      processingSection.hidden = false;
+
+      // Build form data
+      const formData = new FormData();
+      formData.append('invite_code', code);
+      for (const file of files) {
+        formData.append('pdfs', file);
+      }
+
+      try {
+        const response = await fetch(`${BACKEND_URL}/process`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          let detail = 'Error desconocido / Unknown error';
+          try {
+            const err = await response.json();
+            detail = err.detail || detail;
+          } catch (_) {}
+          throw new Error(detail);
+        }
+
+        // Switch to report view
+        processingSection.hidden = true;
+        reportSection.hidden = false;
+
+        // Stream the response
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let codesFound = false;
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          buffer += chunk;
+
+          // Check for the codes marker
+          const codesMarker = '__CODES__:';
+          const markerIdx = buffer.indexOf(codesMarker);
+
+          if (markerIdx !== -1 && !codesFound) {
+            // Render everything before the marker as report text
+            const reportText = buffer.substring(0, markerIdx);
+            renderMarkdown(reportText);
+
+            // Parse codes
+            const codesJson = buffer.substring(markerIdx + codesMarker.length);
+            try {
+              const codes = JSON.parse(codesJson);
+              renderCodes(codes);
+              codesFound = true;
+            } catch (_) {
+              // Codes JSON may still be streaming — buffer it
+            }
+          } else if (!codesFound) {
+            // Still accumulating — render what we have so far (streaming effect)
+            renderMarkdown(buffer);
+          }
+        }
+
+      } catch (err) {
+        processingSection.hidden = true;
+        uploadSection.hidden = false;
+        showError(err.message || 'Error al procesar. / Processing error.');
+      }
+    });
+
+    function renderMarkdown(text) {
+      // Minimal rendering: preserve line breaks and basic structure.
+      // No external markdown library — keep it simple and dependency-free.
+      reportBody.innerHTML = text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.+?)\*/g, '<em>$1</em>')
+        .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+        .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+        .replace(/^# (.+)$/gm, '<h1>$1</h1>')
+        .replace(/\n/g, '<br />');
+    }
+
+    function renderCodes(codes) {
+      codeList.innerHTML = '';
+      codes.forEach(code => {
+        const li = document.createElement('li');
+        li.textContent = code;
+        codeList.appendChild(li);
+      });
+      codesSection.hidden = false;
+    }
+
+    function showError(message) {
+      errorBox.textContent = message;
+      errorBox.hidden = false;
+    }
+  </script>
+
+</body>
+</html>
