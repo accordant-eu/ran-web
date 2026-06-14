@@ -1,7 +1,10 @@
 FROM python:3.12-slim
 
+# Install su-exec for clean privilege dropping
+RUN apt-get update && apt-get install -y --no-install-recommends su-exec && rm -rf /var/lib/apt/lists/*
+
 # Create non-root user
-RUN useradd --create-home --shell /bin/bash ran
+RUN useradd --create-home --shell /bin/bash --uid 1000 ran
 
 WORKDIR /app
 
@@ -9,12 +12,16 @@ WORKDIR /app
 COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Copy application code and entrypoint
 COPY backend/main.py .
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
-# Run as non-root
-USER ran
+# Create mount points with correct ownership
+RUN mkdir -p /app/data /app/prompts && chown -R ran:ran /app/data /app/prompts
 
 EXPOSE 8000
 
+# Start as root so entrypoint can fix bind-mount permissions, then drop to ran
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

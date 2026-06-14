@@ -26,6 +26,9 @@ echo "Fetching prompt from $REPO/$PROMPT_PATH ..."
 
 mkdir -p "$OUTPUT_DIR"
 
+# Ensure container's ran user (uid 1000) can read the prompt
+chown -R 1000:1000 "$OUTPUT_DIR" 2>/dev/null || true
+
 # Fetch via GitHub Contents API — returns base64-encoded content
 RESPONSE=$(curl -sf \
   -H "Authorization: Bearer $GITHUB_TOKEN" \
