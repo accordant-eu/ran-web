@@ -51,6 +51,19 @@ def tmp_env(tmp_path, monkeypatch):
     monkeypatch.setenv("OPS_LOG_FILE", str(ops_file))
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-not-used-in-unit-tests")
 
+    # Force a fresh import so module-level constants pick up the new env vars.
+    # Without this, a cached import retains constants from a previous test's env.
+    import importlib
+    import sys
+    if "main" in sys.modules:
+        del sys.modules["main"]
+    import main
+    # Belt-and-braces: patch module attributes directly so any already-imported
+    # references in other fixtures also see the correct paths.
+    monkeypatch.setattr(main, "INVITE_CODES_FILE", str(codes_file))
+    monkeypatch.setattr(main, "OPS_LOG_FILE",      str(ops_file))
+    monkeypatch.setattr(main, "CODE_LOCK_FILE",    str(tmp_path / ".codes.lock"))
+
     return {
         "prompt_file": prompt_file,
         "codes_file": codes_file,
@@ -81,21 +94,21 @@ class TestInviteCodes:
         import main
         codes = main.load_codes()
         assert "RENTA-TEST" in codes
-        assert codes["RENTA-TEST"] is False  # not used
+        assert codes["RENTA-TEST"] == 0  # fresh: 0 uses
 
     def test_load_codes_used_prefix(self, tmp_env):
         # Mark a code used by writing USED: prefix directly
         tmp_env["codes_file"].write_text("USED:RENTA-USED\nRENTA-FRESH\n")
         import main
         codes = main.load_codes()
-        assert codes["RENTA-USED"] is True
-        assert codes["RENTA-FRESH"] is False
+        assert codes["RENTA-USED"] >= main.MAX_CODE_USES  # exhausted
+        assert codes["RENTA-FRESH"] == 0                  # fresh
 
     def test_mark_code_used(self, tmp_env):
         import main
         main.mark_code_used("RENTA-TEST")
         codes = main.load_codes()
-        assert codes["RENTA-TEST"] is True
+        assert codes["RENTA-TEST"] > 0  # incremented
 
     def test_generate_new_codes_count(self, tmp_env):
         import main

@@ -85,6 +85,16 @@ def tmp_env(tmp_path, monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key-not-used")
     monkeypatch.setenv("MAX_CODE_USES", "10")
 
+    # Force a fresh import so module-level constants pick up the new env vars.
+    import importlib
+    import sys
+    if "main" in sys.modules:
+        del sys.modules["main"]
+    import main
+    monkeypatch.setattr(main, "INVITE_CODES_FILE", str(codes_file))
+    monkeypatch.setattr(main, "OPS_LOG_FILE",      str(ops_file))
+    monkeypatch.setattr(main, "CODE_LOCK_FILE",    str(tmp_path / ".codes.lock"))
+
     return {"prompt_file": prompt_file, "codes_file": codes_file,
             "ops_file": ops_file, "tmp_path": tmp_path}
 
