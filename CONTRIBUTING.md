@@ -1,5 +1,9 @@
 # Contributing
 
+## Read first
+
+Before making any changes, read **[`AGENTS.md`](AGENTS.md)**. It defines the non-negotiable invariants for this codebase — zero data retention, privacy policy alignment, and the Art. 9 consent requirement. These apply to both humans and AI agents.
+
 ## Commit messages
 
 Use [Conventional Commits](https://www.conventionalcommits.org/).
@@ -22,7 +26,7 @@ Optional longer body.
 | `ci` | CI/CD pipeline changes |
 | `chore` | Maintenance (deps, config, tooling) |
 
-**Scopes:** `backend`, `frontend`, `deploy`, `scripts`, `tests`, `docker`
+**Scopes:** `backend`, `frontend`, `privacy`, `deploy`, `scripts`, `tests`, `docker`, `docs`
 
 **Examples:**
 ```
