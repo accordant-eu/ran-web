@@ -273,19 +273,59 @@
     const dropZone  = document.getElementById('drop-zone');
     const dropFiles = document.getElementById('drop-files');
     const dropInner = document.getElementById('drop-inner');
+    let selectedFiles = []; // mutable array — FileList is read-only
 
-    fileInput.addEventListener('change', showFiles);
+    fileInput.addEventListener('change', () => {
+      mergeFiles(Array.from(fileInput.files));
+    });
     ['dragover','dragenter'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.add('over'); }));
     ['dragleave','drop'].forEach(e => dropZone.addEventListener(e, ev => { ev.preventDefault(); dropZone.classList.remove('over'); }));
-    dropZone.addEventListener('drop', ev => { fileInput.files = ev.dataTransfer.files; showFiles(); });
+    dropZone.addEventListener('drop', ev => { mergeFiles(Array.from(ev.dataTransfer.files)); });
 
-    function showFiles() {
-      const names = Array.from(fileInput.files).map(f => f.name);
-      if (!names.length) return;
+    function mergeFiles(newFiles) {
+      // Add only PDFs, deduplicate by name, cap at 2
+      for (const f of newFiles) {
+        if (f.type !== 'application/pdf' && !f.name.endsWith('.pdf')) continue;
+        if (!selectedFiles.find(e => e.name === f.name)) selectedFiles.push(f);
+      }
+      if (selectedFiles.length > 2) selectedFiles = selectedFiles.slice(0, 2);
+      syncInput();
+      renderFiles();
+    }
+
+    function removeFile(name) {
+      selectedFiles = selectedFiles.filter(f => f.name !== name);
+      syncInput();
+      renderFiles();
+    }
+
+    function syncInput() {
+      // Rebuild the FileList from our mutable array
+      const dt = new DataTransfer();
+      selectedFiles.forEach(f => dt.items.add(f));
+      fileInput.files = dt.files;
+    }
+
+    function renderFiles() {
+      if (!selectedFiles.length) {
+        dropInner.hidden = false;
+        dropFiles.hidden = true;
+        dropFiles.innerHTML = '';
+        return;
+      }
       dropInner.hidden = true;
       dropFiles.hidden = false;
-      dropFiles.innerHTML = names.map(n => `<span class="file-chip">📄 ${n}</span>`).join('');
+      dropFiles.innerHTML = selectedFiles.map(f =>
+        `<span class="file-chip">
+          📄 <span class="file-name">${f.name}</span>
+          <button type="button" class="file-remove" onclick="removeFile('${f.name.replace(/'/g, "\\'")}')"
+            aria-label="Remove ${f.name}">✕</button>
+        </span>`
+      ).join('');
     }
+
+    // Expose removeFile globally for inline onclick
+    window.removeFile = removeFile;
 
     // ── Marked config ────────────────────────────────────────────────────────
     marked.use({ gfm: true, breaks: false });
