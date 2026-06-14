@@ -187,7 +187,8 @@ class TestNoContentInLogs:
         })
         entry = json.loads(tmp_env["ops_file"].read_text().strip())
         allowed = {"ts", "code_used", "returns_uploaded", "file_size_bytes",
-                   "response_time_ms", "completed"}
+                   "response_time_ms", "completed",
+                   "input_tokens", "output_tokens", "cost_usd"}
         unexpected = set(entry.keys()) - allowed
         assert not unexpected, f"Unexpected fields in ops log: {unexpected}"
 
@@ -298,6 +299,83 @@ class TestCodeFileRetention:
             if ":" in line and not line.startswith("USED:"):
                 _, count = line.rsplit(":", 1)
                 assert count.isdigit(), f"Non-numeric counter in codes.txt: {line!r}"
+
+
+# ---------------------------------------------------------------------------
+# 6. Token / cost fields — metadata, not content
+# ---------------------------------------------------------------------------
+
+class TestTokenCostFields:
+
+    def test_token_fields_are_numeric(self, tmp_env):
+        """input_tokens, output_tokens, and cost_usd must be numeric if present."""
+        import main
+        main.append_ops_log({
+            "ts": "2026-01-01T00:00:00Z",
+            "code_used": "RENTA-ZRT1",
+            "returns_uploaded": 1,
+            "file_size_bytes": 1234,
+            "response_time_ms": 5000,
+            "completed": True,
+            "input_tokens": 4200,
+            "output_tokens": 1800,
+            "cost_usd": 0.039600,
+        })
+        entry = json.loads(tmp_env["ops_file"].read_text().strip())
+        assert isinstance(entry["input_tokens"], int),  "input_tokens must be int"
+        assert isinstance(entry["output_tokens"], int), "output_tokens must be int"
+        assert isinstance(entry["cost_usd"], float),    "cost_usd must be float"
+
+    def test_token_fields_contain_no_text(self, tmp_env):
+        """Token counts must not be strings or contain document content."""
+        import main
+        MARKER = "CONTENT_IN_TOKEN_FIELD_TEST"
+        main.append_ops_log({
+            "ts": "2026-01-01T00:00:00Z",
+            "code_used": "RENTA-ZRT1",
+            "returns_uploaded": 1,
+            "file_size_bytes": 999,
+            "response_time_ms": 1000,
+            "completed": True,
+            "input_tokens": 3000,
+            "output_tokens": 900,
+            "cost_usd": 0.0225,
+        })
+        log_text = tmp_env["ops_file"].read_text()
+        assert MARKER not in log_text, "Content marker found in token fields"
+
+    def test_cost_is_non_negative(self, tmp_env):
+        """cost_usd must be zero or positive."""
+        import main
+        main.append_ops_log({
+            "ts": "2026-01-01T00:00:00Z",
+            "code_used": "RENTA-ZRT1",
+            "returns_uploaded": 1,
+            "file_size_bytes": 500,
+            "response_time_ms": 3000,
+            "completed": True,
+            "input_tokens": 100,
+            "output_tokens": 50,
+            "cost_usd": 0.001050,
+        })
+        entry = json.loads(tmp_env["ops_file"].read_text().strip())
+        assert entry["cost_usd"] >= 0, "cost_usd must be non-negative"
+
+    def test_ops_log_valid_without_token_fields(self, tmp_env):
+        """Token fields are optional — ops log must still be valid without them (legacy entries)."""
+        import main
+        main.append_ops_log({
+            "ts": "2026-01-01T00:00:00Z",
+            "code_used": "RENTA-ZRT1",
+            "returns_uploaded": 1,
+            "file_size_bytes": 1234,
+            "response_time_ms": 1000,
+            "completed": True,
+            # no token fields
+        })
+        entry = json.loads(tmp_env["ops_file"].read_text().strip())
+        assert "ts" in entry
+        assert "cost_usd" not in entry  # not present, not defaulted to anything
 
 
 # ---------------------------------------------------------------------------

@@ -58,11 +58,11 @@ Only two files are ever written, and neither contains document content:
 | File | What it contains | What it never contains |
 |---|---|---|
 | `codes.txt` | Invite codes + use counts (e.g. `RENTA-XXXX:3`) | Names, NIFs, document text, IP addresses |
-| `ops_log.jsonl` | One JSON line per session: timestamp, file size in bytes, code used, response time, completion flag | Document content, extracted text, user identity, IP addresses |
+| `ops_log.jsonl` | One JSON line per session: timestamp, file size in bytes, code used, response time, token counts, cost in USD, completion flag | Document content, extracted text, user identity, IP addresses |
 
 Example ops log entry:
 ```json
-{"ts": "2026-06-14T15:21:05Z", "code_used": "RENTA-B8K1", "returns_uploaded": 2, "file_size_bytes": 479180, "response_time_ms": 109072, "completed": true}
+{"ts": "2026-06-14T15:21:05Z", "code_used": "RENTA-B8K1", "returns_uploaded": 2, "file_size_bytes": 479180, "response_time_ms": 109072, "completed": true, "input_tokens": 18432, "output_tokens": 2841, "cost_usd": 0.097863}
 ```
 
 ### IP addresses
@@ -123,7 +123,7 @@ pytest tests/test_zero_retention.py -v
 Tests cover:
 - PDF never written to `/tmp`, Python tempdir, or working directory
 - Known text markers embedded in test PDFs do not appear in any log file after processing
-- Ops log contains only the allowed metadata fields — no document content
+- Ops log contains only the allowed metadata fields (including token counts and cost) — no document content
 - BytesIO isolation: content from one session does not bleed into the next
 - Code file contains only invite code patterns — no document content
 - API response is a stream, not a URL pointing to a stored report
