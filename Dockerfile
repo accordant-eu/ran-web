@@ -24,4 +24,6 @@ EXPOSE 8000
 
 # Start as root so entrypoint can fix bind-mount permissions, then drop to ran
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Two workers: each handles one concurrent Anthropic stream (sync in thread).
+# fcntl.LOCK_EX in codes_lock() is process-safe, so multi-worker is safe.
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "2"]

@@ -1,3 +1,9 @@
+# Note: true outbound egress restriction to api.anthropic.com only requires
+# iptables rules on the host (see docs/security-hardening.md).
+networks:
+  ran-net:
+    driver: bridge
+
 services:
   ran-web:
     build: .
@@ -15,7 +21,11 @@ services:
       - OPS_LOG_FILE=/app/data/ops_log.jsonl
     ports:
       - "127.0.0.1:8000:8000"   # localhost only — nginx proxies externally
-    # Network isolation: only needs outbound HTTPS to Anthropic API
-    # Uncomment to restrict further:
-    # networks:
-    #   - ran-net
+    # Read-only root filesystem — all writes go to bind-mounted /app/data.
+    # tmpfs mounts provide writable scratch space for the runtime.
+    read_only: true
+    tmpfs:
+      - /tmp:size=50m
+      - /run:size=10m
+    networks:
+      - ran-net
