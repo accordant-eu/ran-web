@@ -225,6 +225,32 @@ ran-web/
 
 ---
 
+## Privacy Policy
+
+The privacy policy is live at **`ran.accordant.eu/privacy`** — bilingual ES/EN, Spanish is the official version (AEPD/LOPDGDD jurisdiction).
+
+The policy was written after a complete audit of the codebase and verified by an adversarial AI compliance reviewer. Every claim is traceable to a specific source file. See [`docs/privacy-policy-methodology.md`](docs/privacy-policy-methodology.md) for:
+
+- Which source files were audited and what each confirmed
+- Key findings that changed the draft (pseudonymous invite codes, selective nginx logging, Art. 9 consent)
+- Full adversarial review findings and fixes (6 critical, 2 significant)
+- Maintenance checklist and adversarial review template for future updates
+
+**Key disclosures in brief:**
+
+| Data | Retained? |
+|---|---|
+| PDF content / extracted text | Never — RAM only, discarded after request |
+| Generated report | Never — streamed to browser, not stored |
+| IP address (PDF upload route `/process`) | Never — `access_log off` |
+| IP address (static file requests) | 30 days — standard nginx access log |
+| Operational metadata (`ops_log.jsonl`) | 12 months maximum |
+| Anthropic API logs | 7 days (Anthropic policy), then permanently deleted |
+
+Anthropologic processes data under SCCs + EU-US DPF. No API data is used for model training.
+
+---
+
 ## What this is not
 
 - Not a full accounting tool
