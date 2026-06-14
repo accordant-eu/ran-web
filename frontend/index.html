@@ -23,7 +23,7 @@
   <section class="hero">
     <div class="hero-inner">
       <h1>
-        <span class="show-es">Tu declaración de la renta, explicada en inglés claro.</span>
+        <span class="show-es">Tu declaración de la renta, explicada con claridad.</span>
         <span class="show-en">Your Spanish tax return, explained in plain English.</span>
       </h1>
       <p class="hero-sub">
@@ -62,6 +62,7 @@
         </p>
 
         <form id="ran-form">
+          <input type="hidden" id="lang-field" name="language" value="es" />
           <div class="field">
             <label for="invite-code">
               <span class="show-es">Código de invitación</span>
@@ -266,6 +267,7 @@
       const es = document.body.classList.toggle('lang-es');
       document.body.classList.toggle('lang-en', !es);
       document.documentElement.lang = es ? 'es' : 'en';
+      document.getElementById('lang-field').value = es ? 'es' : 'en';
     });
 
     // ── File drop ────────────────────────────────────────────────────────────

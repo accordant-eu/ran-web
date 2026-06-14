@@ -217,6 +217,7 @@ async def health():
 @app.post("/process")
 async def process(
     invite_code: str = Form(...),
+    language: str = Form("en"),
     pdfs: list[UploadFile] = File(...),
 ):
     """
@@ -282,6 +283,20 @@ async def process(
             f"<declaracion_1>\n{extracted_texts[0]}\n</declaracion_1>\n\n"
             f"<declaracion_2>\n{extracted_texts[1]}\n</declaracion_2>\n\n"
             "Analyse both declarations together as a household filing."
+        )
+
+    # Append language instruction — overrides any language in the system prompt
+    lang = language.lower().strip()
+    if lang == "es":
+        user_message += (
+            "\n\nPor favor, responde íntegramente en español. "
+            "Mantén los términos fiscales españoles pero explícalos con claridad "
+            "para alguien sin formación fiscal especializada."
+        )
+    else:
+        user_message += (
+            "\n\nPlease respond entirely in English. "
+            "Use plain, clear language suitable for a financially literate non-specialist."
         )
 
     # --- Mark code used and generate new codes ---
