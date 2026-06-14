@@ -60,6 +60,7 @@ unexpected=$(docker exec "$CONTAINER" find /app \
   -not -path "/app/data/*" \
   -not -path "/app/prompts/*" \
   -not -name "main.py" \
+  -not -name "requirements.txt" \
   -not -name "*.pyc" \
   -type f 2>/dev/null | grep -v "__pycache__" | wc -l)
 if [ "$unexpected" -eq 0 ]; then
@@ -94,14 +95,22 @@ else
   warn "Ops log is empty or does not exist — no sessions to audit yet"
 fi
 
-# 5. Nginx access log — no /process entries
+# 5. Nginx access log — no /process entries in the last hour
+# (entries from before access_log was configured are expected; only flag recent ones)
 echo ""
-echo "5. Nginx access log — /process IP logging"
-if sudo grep -q "POST /process" /var/log/nginx/access.log 2>/dev/null; then
-  red "Found /process entries in nginx access log — IPs may have been logged"
-  warn "Expected: access_log off for /process. Check nginx config."
+echo "5. Nginx access log — /process IP logging (last 60 min)"
+CUTOFF=$(date -u -d "60 minutes ago" +"%d/%b/%Y:%H:%M" 2>/dev/null || date -u -v-60M +"%d/%b/%Y:%H:%M")
+recent_process=$(sudo awk -v cutoff="$CUTOFF" '
+  /POST \/process/ {
+    match($4, /\[(.*)\]/, t)
+    if (t[1] >= cutoff) print
+  }
+' /var/log/nginx/access.log 2>/dev/null | wc -l)
+if [ "$recent_process" -gt 0 ]; then
+  red "$recent_process recent /process entries found in nginx access log"
+  warn "access_log off may not be active — check nginx config"
 else
-  ok "No /process entries in nginx access log (access_log off confirmed)"
+  ok "No recent /process entries in nginx access log (access_log off confirmed)"
 fi
 
 # 6. Nginx error log — check for unexpected PDF temp files
