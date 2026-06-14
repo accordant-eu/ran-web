@@ -26,6 +26,17 @@ Runs on the same host as other services. Docker provides namespace isolation (se
 
 **Known limitation:** Docker uses the host kernel. A container escape via a kernel exploit would expose the host. Acceptable at Phase 0 scale; migrate to a dedicated VPS before public launch.
 
+## Phase 0 → Phase 1 gate
+
+Before opening to the public (Phase 1), migrate to a dedicated VPS. This is a hard gate — do not skip it.
+
+Checklist before migration:
+- [ ] Phase 0 cohort completed (10+ sessions, referral chain visible in ops log)
+- [ ] Dedicated Hetzner CAX11 VPS provisioned
+- [ ] `ran-web` re-deployed on new VPS using same procedure below
+- [ ] DNS updated: `ran.accordant.eu` → new VPS IP
+- [ ] OpenClaw server confirmed unchanged and isolated
+
 ## Phase 1+ — Dedicated VPS (recommended)
 
 For public launch, run `ran-web` on a separate VPS. This gives full hardware isolation — if `ran-web` is compromised, there is no path to other services.
