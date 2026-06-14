@@ -95,6 +95,15 @@ def tmp_env(tmp_path, monkeypatch):
     monkeypatch.setattr(main, "OPS_LOG_FILE",      str(ops_file))
     monkeypatch.setattr(main, "CODE_LOCK_FILE",    str(tmp_path / ".codes.lock"))
 
+    # Redirect Python's tempdir to tmp_path so scan_for_pdf_magic only walks
+    # a small controlled directory (not all of /tmp which can be huge in CI).
+    # This also makes the tempdir leak test more meaningful: any tempfile write
+    # inside extract_pdf_text will land in tmp_path and be caught.
+    monkeypatch.setenv("TMPDIR",  str(tmp_path))
+    monkeypatch.setenv("TEMP",    str(tmp_path))
+    monkeypatch.setenv("TMP",     str(tmp_path))
+    monkeypatch.setattr(tempfile, "tempdir", str(tmp_path))
+
     return {"prompt_file": prompt_file, "codes_file": codes_file,
             "ops_file": ops_file, "tmp_path": tmp_path}
 
@@ -135,6 +144,8 @@ class TestNoPDFOnDisk:
         """Python's tempfile.gettempdir() must not gain PDF files during extraction."""
         import main
         marker_pdf = make_pdf_with_marker("PYTMP_CHECK")
+        # tmp_env redirects tempfile.tempdir → tmp_path so gettempdir() returns
+        # our controlled directory, not the system /tmp (which can be huge in CI).
         pytmp = tempfile.gettempdir()
         before = set(scan_for_pdf_magic(pytmp))
         try:
