@@ -345,19 +345,24 @@ button[type="submit"]:hover { background: var(--navy-d); }
 
 /* ── Processing ──────────────────────────────────────────────────────────── */
 .state-screen {
-  padding: 5rem 0;
+  padding: 2rem 0;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 }
 .state-inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 1.25rem;
   width: 100%;
-  max-width: 480px;
+  max-width: var(--form-max);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
-.progress-wrap { width: 100%; }
+.progress-wrap { width: 100%; margin-bottom: 0.5rem; }
 .progress-track {
   height: 3px;
   background: var(--border);

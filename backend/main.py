@@ -40,17 +40,25 @@ MAX_CODE_USES = int(os.environ.get("MAX_CODE_USES", "10"))  # uses per code
 # System prompt: loaded from env var directly, or from a file path.
 # The prompt is NOT committed to this repository — it lives in a private store
 # and is injected at runtime.
-def load_system_prompt() -> str:
+LANGUAGE_STRINGS = {
+    "es": "español claro y sencillo",
+    "en": "plain, simple English",
+}
+
+def load_system_prompt(language: str = "en") -> str:
+    """Load system prompt and substitute the {REPORT_LANGUAGE} placeholder."""
     prompt = os.environ.get("IRPF_SYSTEM_PROMPT", "")
-    if prompt:
-        return prompt
-    prompt_file = os.environ.get("IRPF_SYSTEM_PROMPT_FILE", "")
-    if prompt_file and os.path.exists(prompt_file):
-        with open(prompt_file, "r") as f:
-            return f.read().strip()
-    raise RuntimeError(
-        "No system prompt configured. Set IRPF_SYSTEM_PROMPT or IRPF_SYSTEM_PROMPT_FILE."
-    )
+    if not prompt:
+        prompt_file = os.environ.get("IRPF_SYSTEM_PROMPT_FILE", "")
+        if prompt_file and os.path.exists(prompt_file):
+            with open(prompt_file, "r") as f:
+                prompt = f.read().strip()
+        else:
+            raise RuntimeError(
+                "No system prompt configured. Set IRPF_SYSTEM_PROMPT or IRPF_SYSTEM_PROMPT_FILE."
+            )
+    lang_str = LANGUAGE_STRINGS.get(language.lower(), LANGUAGE_STRINGS["en"])
+    return prompt.replace("{REPORT_LANGUAGE}", lang_str)
 
 
 # ---------------------------------------------------------------------------
@@ -270,7 +278,7 @@ async def process(
 
     # --- Load system prompt ---
     try:
-        system_prompt = load_system_prompt()
+        system_prompt = load_system_prompt(language)
     except RuntimeError as e:
         logger.error("System prompt not configured: %s", e)
         raise HTTPException(status_code=500, detail="Service misconfigured.")
@@ -306,19 +314,7 @@ async def process(
             "Analyse both declarations together as a household filing."
         )
 
-    # Append language instruction — overrides any language in the system prompt
-    lang = language.lower().strip()
-    if lang == "es":
-        user_message += (
-            "\n\nPor favor, responde íntegramente en español. "
-            "Mantén los términos fiscales españoles pero explícalos con claridad "
-            "para alguien sin formación fiscal especializada."
-        )
-    else:
-        user_message += (
-            "\n\nPlease respond entirely in English. "
-            "Use plain, clear language suitable for a financially literate non-specialist."
-        )
+
 
     # --- Mark code used and generate new codes ---
     # We do this before streaming so codes are ready to append at the end.

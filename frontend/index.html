@@ -378,6 +378,8 @@
       uploadSection.hidden     = state !== 'upload';
       processingSection.hidden = state !== 'processing';
       reportSection.hidden     = state !== 'report';
+      // Scroll to top of page on every state transition
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     // ── Step animation ───────────────────────────────────────────────────────
