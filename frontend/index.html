@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="version" content="dev" />
+  <meta name="version" content="2026-06-14.29a86fb" />
   <title>Rán — Entiende tu declaración de la renta</title>
   <link rel="stylesheet" href="style.css" />
   <script src="marked.min.js"></script>
@@ -81,6 +81,21 @@
               </div>
               <div class="drop-files" id="drop-files" hidden></div>
             </div>
+          </div>
+
+          <!-- Art. 9 GDPR explicit consent — must tick before submitting -->
+          <div class="consent-field">
+            <label>
+              <input type="checkbox" id="art9-consent" name="art9_consent" required />
+              <span>
+                <span class="consent-tag">
+                  <span class="show-es">Consentimiento expreso — Art. 9 RGPD</span>
+                  <span class="show-en">Explicit consent — Art. 9 GDPR</span>
+                </span>
+                <span class="show-es">Entiendo que mi declaración puede contener datos de salud o discapacidad. Consiento expresamente su tratamiento por parte de Rán y de la API de Anthropic únicamente para generar el informe solicitado. <a href="/privacy" target="_blank" rel="noopener">Política de privacidad →</a></span>
+                <span class="show-en">I understand my return may contain health or disability data. I explicitly consent to its processing by Rán and the Anthropic API solely to generate the requested report. <a href="/privacy" target="_blank" rel="noopener">Privacy policy →</a></span>
+              </span>
+            </label>
           </div>
 
           <div class="error-box" id="error-box" hidden></div>
@@ -289,6 +304,10 @@
         <a href="https://github.com/accordant-eu/ran-web" target="_blank" rel="noopener">GitHub</a>
         <a href="https://platform.claude.com/docs/en/manage-claude/api-and-data-retention" target="_blank" rel="noopener">Anthropic data retention</a>
         <a href="https://www.anthropic.com/legal/aio" target="_blank" rel="noopener">Anthropic API policy</a>
+        <a href="/privacy">
+          <span class="show-es">Política de privacidad</span>
+          <span class="show-en">Privacy policy</span>
+        </a>
       </p>
     </div>
   </footer>
