@@ -35,6 +35,7 @@ ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
 INVITE_CODES_FILE = os.environ.get("INVITE_CODES_FILE", "codes.txt")
 OPS_LOG_FILE = os.environ.get("OPS_LOG_FILE", "ops_log.jsonl")
+MAX_CODE_USES = int(os.environ.get("MAX_CODE_USES", "10"))  # uses per code
 
 # System prompt: loaded from env var directly, or from a file path.
 # The prompt is NOT committed to this repository — it lives in a private store
@@ -78,10 +79,13 @@ app.add_middleware(
 # Invite code management
 # ---------------------------------------------------------------------------
 
-def load_codes() -> dict[str, bool]:
+def load_codes() -> dict[str, int]:
     """
-    Read codes.txt and return a dict of {code: used}.
-    Format: one code per line. Used codes are prefixed with "USED:".
+    Read codes.txt and return a dict of {code: use_count}.
+    Format:
+      RENTA-XXXX        → fresh (0 uses)
+      RENTA-XXXX:3      → used 3 times
+      USED:RENTA-XXXX   → exhausted (legacy / explicitly retired)
     """
     if not os.path.exists(INVITE_CODES_FILE):
         return {}
@@ -92,14 +96,20 @@ def load_codes() -> dict[str, bool]:
             if not line:
                 continue
             if line.startswith("USED:"):
-                codes[line[5:]] = True
+                codes[line[5:]] = MAX_CODE_USES  # exhausted
+            elif ":" in line:
+                code, count = line.rsplit(":", 1)
+                try:
+                    codes[code] = int(count)
+                except ValueError:
+                    codes[line] = 0
             else:
-                codes[line] = False
+                codes[line] = 0
     return codes
 
 
 def mark_code_used(code: str) -> None:
-    """Mark an invite code as used in codes.txt."""
+    """Increment use count for a code. Mark USED: when MAX_CODE_USES is reached."""
     lines = []
     if os.path.exists(INVITE_CODES_FILE):
         with open(INVITE_CODES_FILE, "r") as f:
@@ -108,8 +118,19 @@ def mark_code_used(code: str) -> None:
     updated = []
     for line in lines:
         stripped = line.strip()
-        if stripped == code:
-            updated.append(f"USED:{code}\n")
+        # Match this code in any format
+        if stripped == code or stripped.startswith(f"{code}:"):
+            current = 0
+            if ":" in stripped and not stripped.startswith("USED:"):
+                try:
+                    current = int(stripped.rsplit(":", 1)[1])
+                except ValueError:
+                    pass
+            new_count = current + 1
+            if new_count >= MAX_CODE_USES:
+                updated.append(f"USED:{code}\n")
+            else:
+                updated.append(f"{code}:{new_count}\n")
         else:
             updated.append(line)
 
@@ -244,7 +265,7 @@ async def process(
     codes = load_codes()
     if invite_code not in codes:
         raise HTTPException(status_code=403, detail="Invalid invite code.")
-    if codes[invite_code]:
+    if codes[invite_code] >= MAX_CODE_USES:
         raise HTTPException(status_code=403, detail="Invite code already used.")
 
     # --- Load system prompt ---

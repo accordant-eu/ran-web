@@ -11,41 +11,25 @@
 
   <nav>
     <div class="nav-inner">
-      <span class="logo">Rán</span>
-      <button class="lang-btn" id="lang-toggle">
-        <span class="show-es">EN</span>
-        <span class="show-en">ES</span>
-      </button>
-    </div>
-  </nav>
-
-  <!-- ── Hero ─────────────────────────────────────────────────────────────── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <h1>
-        <span class="show-es">Tu declaración de la renta, explicada con claridad.</span>
-        <span class="show-en">Your Spanish tax return, explained in plain English.</span>
-      </h1>
-      <p class="hero-sub">
-        <span class="show-es">Sube tu borrador del Modelo 100. Recibe una explicación completa: de dónde viene cada cifra, qué deducciones se aplican, y qué vale la pena revisar.</span>
-        <span class="show-en">Upload your Modelo 100 draft. Get a full plain-language breakdown: where every figure comes from, which deductions apply, and what's worth a second look.</span>
-      </p>
-      <div class="trust-pills">
-        <span class="pill">
+      <div class="nav-brand">
+        <span class="logo">Rán</span>
+        <span class="nav-tagline">
+          <span class="show-es">Tu declaración de la renta, explicada con claridad.</span>
+          <span class="show-en">Your Spanish tax return, explained in plain English.</span>
+        </span>
+      </div>
+      <div class="nav-right">
+        <span class="pill-sm">
           <span class="show-es">🔒 Sin retención de datos</span>
           <span class="show-en">🔒 Zero data retention</span>
         </span>
-        <span class="pill">
-          <span class="show-es">📖 Código abierto</span>
-          <span class="show-en">📖 Open source</span>
-        </span>
-        <span class="pill">
-          <span class="show-es">⚡ Resultado en ~90 segundos</span>
-          <span class="show-en">⚡ Result in ~90 seconds</span>
-        </span>
+        <button class="lang-btn" id="lang-toggle">
+          <span class="show-es">EN</span>
+          <span class="show-en">ES</span>
+        </button>
       </div>
     </div>
-  </section>
+  </nav>
 
   <main>
 
@@ -81,6 +65,10 @@
                 <span class="show-en">Max 2</span>
               </span>
             </label>
+            <p class="pdf-hint">
+              <span class="show-es">Tu borrador del Modelo 100. Si tú y tu cónyuge hacéis declaraciones individuales, sube ambos borradores — los analizaremos juntos como hogar.</span>
+              <span class="show-en">Your Modelo 100 draft. If you and your spouse file separately, upload both drafts — we'll analyse them together as a household.</span>
+            </p>
             <div class="drop-zone" id="drop-zone">
               <input type="file" id="pdfs" name="pdfs" accept=".pdf,application/pdf" multiple required />
               <div class="drop-inner" id="drop-inner">
