@@ -10,7 +10,7 @@ if [ "$(id -u)" = "0" ]; then
   chown -R ran:ran /app/data /app/prompts 2>/dev/null || true
   chmod 775 /app/data 2>/dev/null || true
   chmod 664 /app/data/*.txt /app/data/*.jsonl 2>/dev/null || true
-  exec su-exec ran "$@"
+  exec gosu ran "$@"
 fi
 
 exec "$@"

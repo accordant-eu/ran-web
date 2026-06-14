@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
-# Install su-exec for clean privilege dropping
-RUN apt-get update && apt-get install -y --no-install-recommends su-exec && rm -rf /var/lib/apt/lists/*
+# Install gosu for clean privilege dropping (su-exec equivalent for Debian)
+RUN apt-get update && apt-get install -y --no-install-recommends gosu && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash --uid 1000 ran
