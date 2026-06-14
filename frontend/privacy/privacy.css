@@ -1,0 +1,121 @@
+    /* Privacy-page specific overrides */
+    .policy-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .policy-header {
+      border-bottom: 2px solid var(--navy);
+      padding-bottom: 1.25rem;
+      margin-bottom: 2rem;
+    }
+    .policy-header h1 {
+      font-size: 1.75rem;
+      color: var(--navy);
+      margin: 0 0 0.35rem;
+    }
+    .policy-header .policy-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+    .policy-lang-note {
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-brd);
+      border-radius: var(--r);
+      padding: 0.75rem 1rem;
+      font-size: 0.82rem;
+      color: var(--amber-tx);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+    .policy-section {
+      margin-bottom: 2.25rem;
+    }
+    .policy-section h2 {
+      font-size: 1.15rem;
+      color: var(--navy);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .policy-section h3 {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin: 1.25rem 0 0.5rem;
+      font-weight: 600;
+    }
+    .policy-section p {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .policy-section ul {
+      font-size: 0.88rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin: 0 0 0.75rem 1.25rem;
+      padding: 0;
+    }
+    .policy-section li {
+      margin-bottom: 0.3rem;
+    }
+    .policy-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.83rem;
+      margin-bottom: 1rem;
+    }
+    .policy-table th {
+      background: var(--navy);
+      color: #fff;
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      font-weight: 600;
+    }
+    .policy-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+      line-height: 1.55;
+    }
+    .policy-table tr:nth-child(even) td {
+      background: #f9f8f6;
+    }
+    .policy-table td:first-child {
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--navy);
+    }
+    .badge-no  { color: var(--green); font-weight: 700; }
+    .badge-yes { color: var(--red);   font-weight: 700; }
+    .badge-7   { color: var(--blue);  font-weight: 700; }
+    .alert-box {
+      background: var(--amber-bg);
+      border: 1px solid var(--amber-brd);
+      border-radius: var(--r);
+      padding: 0.75rem 1rem;
+      font-size: 0.84rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+    .alert-box strong { color: var(--amber-tx); }
+    .rights-table td:first-child { white-space: normal; }
+    .divider-lang {
+      border: none;
+      border-top: 3px double var(--navy);
+      margin: 3rem 0;
+    }
+    .lang-banner {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+    }
+    @media (max-width: 600px) {
+      .policy-table { font-size: 0.78rem; }
+      .policy-table td:first-child { white-space: normal; }
+    }
