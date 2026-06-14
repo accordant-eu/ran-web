@@ -1,0 +1,21 @@
+services:
+  ran-web:
+    build: .
+    container_name: ran-web
+    restart: unless-stopped
+    env_file:
+      - backend/.env
+    volumes:
+      # Prompt file — fetched from accordant-eu/ran via fetch-prompt.sh, never committed
+      - ./prompts:/app/prompts:ro
+      # Ops data — codes.txt and ops_log.jsonl persist across restarts
+      - ./data:/app/data
+    environment:
+      - INVITE_CODES_FILE=/app/data/codes.txt
+      - OPS_LOG_FILE=/app/data/ops_log.jsonl
+    ports:
+      - "127.0.0.1:8000:8000"   # localhost only — nginx proxies externally
+    # Network isolation: only needs outbound HTTPS to Anthropic API
+    # Uncomment to restrict further:
+    # networks:
+    #   - ran-net

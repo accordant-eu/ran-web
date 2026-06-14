@@ -1,0 +1,7 @@
+backend/.env
+data/
+prompts/
+*.jsonl
+*.pyc
+__pycache__/
+.git/
