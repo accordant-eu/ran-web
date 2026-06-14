@@ -32,6 +32,7 @@ from fastapi.responses import StreamingResponse
 # ---------------------------------------------------------------------------
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
+ANTHROPIC_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
 INVITE_CODES_FILE = os.environ.get("INVITE_CODES_FILE", "codes.txt")
 OPS_LOG_FILE = os.environ.get("OPS_LOG_FILE", "ops_log.jsonl")
 
@@ -190,8 +191,8 @@ def stream_claude_response(
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
 
     with client.messages.stream(
-        model="claude-opus-4-5",
-        max_tokens=4096,
+        model=ANTHROPIC_MODEL,
+        max_tokens=8192,
         system=system_prompt,
         messages=[{"role": "user", "content": user_message}],
     ) as stream:
