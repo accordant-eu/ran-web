@@ -62,7 +62,7 @@ unexpected=$(docker exec "$CONTAINER" find /app \
   -not -name "main.py" \
   -not -name "requirements.txt" \
   -not -name "*.pyc" \
-  -type f 2>/dev/null | grep -v "__pycache__" | wc -l)
+  -type f 2>/dev/null | grep -v "__pycache__" | wc -l || true)
 if [ "$unexpected" -eq 0 ]; then
   ok "No unexpected files in container /app"
 else
@@ -128,7 +128,7 @@ echo ""
 echo "7. Codes file — format integrity"
 if [ -f "$DATA_DIR/codes.txt" ]; then
   invalid_lines=$(grep -v -E '^(USED:)?RENTA-[A-Z0-9]{4}(:[0-9]+)?$' \
-    "$DATA_DIR/codes.txt" | grep -v "^$" | wc -l)
+    "$DATA_DIR/codes.txt" | grep -v "^$" | wc -l || true)
   if [ "$invalid_lines" -eq 0 ]; then
     total=$(grep -c "." "$DATA_DIR/codes.txt" || true)
     used=$(grep -c "^USED:" "$DATA_DIR/codes.txt" || true)
