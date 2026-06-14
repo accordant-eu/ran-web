@@ -191,9 +191,51 @@
         <div class="progress-wrap">
           <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
         </div>
-        <p class="state-label">
-          <span class="show-es">Analizando tu declaración…</span>
-          <span class="show-en">Analysing your return…</span>
+        <ul class="steps" id="steps-list">
+          <li class="step" data-step="0">
+            <span class="step-icon">📄</span>
+            <span class="step-text">
+              <span class="show-es">Recibiendo documentos…</span>
+              <span class="show-en">Receiving documents…</span>
+            </span>
+            <span class="step-check">✓</span>
+          </li>
+          <li class="step" data-step="1">
+            <span class="step-icon">🔍</span>
+            <span class="step-text">
+              <span class="show-es">Extrayendo texto en memoria…</span>
+              <span class="show-en">Extracting text in memory…</span>
+            </span>
+            <span class="step-check">✓</span>
+          </li>
+          <li class="step" data-step="2">
+            <span class="step-icon">🗑️</span>
+            <span class="step-text">
+              <span class="show-es">Descartando los PDFs…</span>
+              <span class="show-en">Discarding PDFs…</span>
+            </span>
+            <span class="step-check">✓</span>
+          </li>
+          <li class="step" data-step="3">
+            <span class="step-icon">🔐</span>
+            <span class="step-text">
+              <span class="show-es">Enviando texto a Claude…</span>
+              <span class="show-en">Sending text to Claude…</span>
+            </span>
+            <span class="step-check">✓</span>
+          </li>
+          <li class="step" data-step="4">
+            <span class="step-icon">📝</span>
+            <span class="step-text">
+              <span class="show-es">Analizando tu declaración…</span>
+              <span class="show-en">Analysing your return…</span>
+            </span>
+            <span class="step-check">✓</span>
+          </li>
+        </ul>
+        <p class="step-note">
+          <span class="show-es">Tus documentos nunca se escriben en disco.</span>
+          <span class="show-en">Your documents are never written to disk.</span>
         </p>
       </div>
     </div>
@@ -350,15 +392,50 @@
       reportSection.hidden     = state !== 'report';
     }
 
-    // ── Progress bar ─────────────────────────────────────────────────────────
-    let progressTimer, pval = 0;
+    // ── Step animation ───────────────────────────────────────────────────────
+    const STEP_TIMINGS = [0, 700, 1500, 2300, 3200]; // ms each step activates
+    let stepTimers = [];
+    let currentStep = -1;
+
     function startProgress() {
-      pval = 0; progressFill.style.transition = 'none'; progressFill.style.width = '0%';
-      progressTimer = setInterval(() => { pval += (85 - pval) * 0.05; progressFill.style.width = pval + '%'; }, 250);
+      // Reset progress bar
+      progressFill.style.transition = 'none';
+      progressFill.style.width = '0%';
+      // Reset all steps
+      currentStep = -1;
+      document.querySelectorAll('.step').forEach(s => {
+        s.classList.remove('active', 'done');
+      });
+      // Animate through steps
+      STEP_TIMINGS.forEach((delay, i) => {
+        const t = setTimeout(() => {
+          // Mark previous step as done
+          if (i > 0) {
+            document.querySelector(`.step[data-step="${i-1}"]`).classList.replace('active', 'done');
+          }
+          // Activate current step
+          const el = document.querySelector(`.step[data-step="${i}"]`);
+          el.classList.add('active');
+          currentStep = i;
+          // Advance progress bar proportionally (steps 0-3 fill to 80%)
+          if (i < 4) {
+            progressFill.style.transition = 'width 0.6s ease';
+            progressFill.style.width = ((i + 1) / 4 * 80) + '%';
+          }
+        }, delay);
+        stepTimers.push(t);
+      });
     }
+
     function doneProgress() {
-      clearInterval(progressTimer);
-      progressFill.style.transition = 'width 0.4s ease';
+      stepTimers.forEach(t => clearTimeout(t));
+      stepTimers = [];
+      // Complete all steps instantly
+      document.querySelectorAll('.step').forEach((s, i) => {
+        if (i < 4) s.classList.add('done');
+        else s.classList.add('active'); // last step stays active while streaming
+      });
+      progressFill.style.transition = 'width 0.3s ease';
       progressFill.style.width = '100%';
     }
 

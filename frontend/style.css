@@ -609,3 +609,68 @@ footer {
   .report-body thead th, .report-body td { padding: 0.45rem 0.6rem; }
   .report-header { flex-direction: column; }
 }
+
+/* ── Step animation ──────────────────────────────────────────────────────── */
+.steps {
+  list-style: none;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 1rem;
+  border-radius: var(--r);
+  opacity: 0.3;
+  transition: opacity 0.35s ease, background 0.35s ease;
+}
+
+.step.active {
+  opacity: 1;
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.step.done {
+  opacity: 0.6;
+}
+
+.step-icon {
+  font-size: 1.1rem;
+  width: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.step-text {
+  font-size: 0.9rem;
+  color: var(--text);
+  flex: 1;
+}
+
+.step-check {
+  font-size: 0.85rem;
+  color: var(--green);
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  flex-shrink: 0;
+}
+
+.step.done .step-check { opacity: 1; }
+
+/* Active step has a subtle left accent */
+.step.active .step-icon { filter: none; }
+.step:not(.active):not(.done) .step-icon { filter: grayscale(1); }
+
+.step-note {
+  margin-top: 1rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
