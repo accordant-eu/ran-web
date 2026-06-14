@@ -1,109 +1,226 @@
 # Rán — Spanish IRPF Explainer
 
-**`ran.accordant.eu`** · Zero-retention · Open-source backend
+**`ran.accordant.eu`** · Zero-retention by design · Open-source · Auditable
 
 ---
 
 ## What it does
 
-Rán accepts a Spanish IRPF tax return (Modelo 100 borrador) — one or two PDFs — and produces a plain-English explanation of what it contains, what it means, and anything worth checking. It is designed for expat professionals and international employees who receive their Spanish *declaración de la renta* each year and have no clear way to interpret it. You upload the PDF, you read the explanation on screen, you close the tab. That's it. Nothing is kept.
+Rán accepts a Spanish IRPF tax return (Modelo 100 borrador) — one or two PDFs — and produces a plain-language explanation of what it contains, what every figure means, and what is worth checking before filing. It is designed for expat professionals and international employees who receive their *declaración de la renta* each year and cannot easily interpret it.
+
+You upload the PDF, you read the explanation on screen, you close the tab. That's it. Nothing is kept.
 
 ---
 
-## Zero-retention architecture
+## Zero-Retention Architecture
+
+This section documents every technical measure taken to ensure that no document content is retained after a session ends. The measures are architectural — enforced by the code — not just policy.
+
+### Data flow
 
 ```
-PDF upload
-    │
-    ▼
-FastAPI backend (RAM only)
-    │
-    ├── pdfplumber extracts text → BytesIO
-    │   PDFs are NEVER written to disk.
-    │
-    ▼
-Anthropic Claude API
-    │
-    ├── System prompt loaded from env var (not stored here)
-    ├── PDF text sent as user message
-    ├── Response streamed back to browser
-    │
-    ▼
-Screen (browser)
-    │
-    └── Close tab → gone. Nothing stored.
+1. User uploads PDF(s)
+        │
+        ▼ (HTTPS — never plain HTTP)
+2. nginx reverse proxy
+        │  access_log off for /process — IP address never written to disk
+        │  rate limiting: 5 req/min per IP, in RAM only
+        ▼
+3. FastAPI backend (ran-web container)
+        │
+        ├── PDF bytes read into BytesIO (in-memory buffer)
+        │   PDFs are NEVER written to disk or any temp file.
+        │
+        ├── pdfplumber.open(BytesIO) extracts text
+        │   No temp files created. Verified in test suite.
+        │
+        ├── PDF bytes released (Python GC)
+        │   The PDF no longer exists anywhere on the server.
+        │
+        ├── Extracted text + system prompt → Anthropic Claude API (HTTPS)
+        │   Only the text goes to the API, not the binary PDF.
+        │
+        ├── Claude response streamed back through the server to the browser
+        │   Report never buffered to disk.
+        │
+        └── Request ends — extracted text released from memory
+                │
+                ▼
+4. Browser renders the report on screen
+        │
+        └── User closes tab → report gone. Nothing to retrieve.
 ```
 
-**What persists:**
-- `codes.txt` — valid/used invite codes (no user data, no document content)
-- `ops_log.jsonl` — operational metadata only: timestamp, file size, response time, code used
+### What is written to disk
 
-**What never persists:**
-- PDFs (never written to disk — `BytesIO` only)
-- Extracted text (lives in Python memory for the duration of one request)
-- The report (shown on screen, never stored)
-- Any user-identifying information
+Only two files are ever written, and neither contains document content:
 
-**Anthropic API data policy:** Anthropic does not use API-submitted data for model training by default.
-See: [https://www.anthropic.com/legal/aio](https://www.anthropic.com/legal/aio)
+| File | What it contains | What it never contains |
+|---|---|---|
+| `codes.txt` | Invite codes + use counts (e.g. `RENTA-XXXX:3`) | Names, NIFs, document text, IP addresses |
+| `ops_log.jsonl` | One JSON line per session: timestamp, file size in bytes, code used, response time, completion flag | Document content, extracted text, user identity, IP addresses |
 
-The architecture enforces zero-retention — not just policy. This code is intentionally short and auditable. Read `backend/main.py` in five minutes and verify it yourself.
+Example ops log entry:
+```json
+{"ts": "2026-06-14T15:21:05Z", "code_used": "RENTA-B8K1", "returns_uploaded": 2, "file_size_bytes": 479180, "response_time_ms": 109072, "completed": true}
+```
+
+### IP addresses
+
+- nginx logs IP addresses for static file requests (HTML, CSS, JS) — standard web server behaviour
+- **`access_log off`** is configured for `/process` and `/health` — no IP addresses are written to disk for document submissions
+- nginx rate limiting uses `$binary_remote_addr` in a 10MB in-memory ring buffer — IPs used transiently to enforce limits, never persisted
+
+### PDF handling — why BytesIO enforces zero retention
+
+Python's `pdfplumber.open()` accepts a file-like object. We pass a `BytesIO` buffer:
+
+```python
+pdf_buffer = BytesIO(file_bytes)      # in-memory, never touches filesystem
+with pdfplumber.open(pdf_buffer) as pdf:
+    text = "\n\n".join(p.extract_text() or "" for p in pdf.pages)
+# pdf_buffer goes out of scope — memory released to GC
+```
+
+This is not just a coding convention. `BytesIO` has no disk path. There is no temp file to leak. The `pdfplumber` library does not create temp files when given a `BytesIO` — this is verified in the test suite.
+
+### Anthropic API
+
+The extracted text (not the binary PDF) is sent to Anthropic's API over HTTPS. Anthropic's published policy for API usage:
+
+> API inputs and outputs are not used to train Anthropic's models by default.
+
+Reference: [https://www.anthropic.com/legal/aio](https://www.anthropic.com/legal/aio)
+
+This is an external trust dependency. We link to Anthropic's published policy and do not make claims beyond it.
+
+### The system prompt
+
+The system prompt (the instructions that tell Claude how to analyse the return) is **not committed to this repository**. It lives in a private repository and is injected at runtime via the `IRPF_SYSTEM_PROMPT_FILE` environment variable. This keeps the analytical logic private while keeping the infrastructure fully auditable.
+
+The backend substitutes a `{REPORT_LANGUAGE}` placeholder in the prompt at runtime to support Spanish and English output.
+
+### Container isolation
+
+`ran-web` runs inside a Docker container with:
+- A non-root `ran` user (uid 1000)
+- `PrivateTmp` and `ProtectSystem=strict` in the systemd unit
+- Only `./data/` and `./prompts/` bind-mounted from the host — nothing else is accessible
+- Runs on the same host as other services for Phase 0; migrated to a dedicated VPS before public launch
+
+---
+
+## Verification
+
+### Automated tests
+
+The test suite includes a dedicated zero-retention module:
+
+```bash
+pytest tests/test_zero_retention.py -v
+```
+
+Tests cover:
+- PDF never written to `/tmp`, Python tempdir, or working directory
+- Known text markers embedded in test PDFs do not appear in any log file after processing
+- Ops log contains only the allowed metadata fields — no document content
+- BytesIO isolation: content from one session does not bleed into the next
+- Code file contains only invite code patterns — no document content
+- API response is a stream, not a URL pointing to a stored report
+
+### Live server audit
+
+```bash
+./scripts/verify-zero-retention.sh
+```
+
+Checks the running server:
+1. No PDF files in host `/tmp`
+2. No PDF files in container `/tmp`
+3. No unexpected files in container `/app` outside `data/` and `prompts/`
+4. Ops log field audit — no forbidden content fields
+5. nginx access log: no `/process` entries in last 60 minutes (confirms `access_log off`)
+6. nginx error log: no PDF file references
+7. `codes.txt` format: all lines match expected pattern — no document content
+
+Exits `0` on pass, `1` on failure. Safe to run against the live production server.
 
 ---
 
 ## Environment variables
 
-| Variable | Description |
-|---|---|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key |
-| `IRPF_SYSTEM_PROMPT` | The full system prompt (paste inline or load from file) |
-| `IRPF_SYSTEM_PROMPT_FILE` | Alternative: path to a `.txt` file containing the prompt |
-| `INVITE_CODES_FILE` | Path to `codes.txt` (one code per line, `USED:` prefix marks consumed codes) |
-| `OPS_LOG_FILE` | Path to `ops_log.jsonl` (append-only operational log) |
+| Variable | Required | Description |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | ✅ | Anthropic API key — create a dedicated key for this service |
+| `IRPF_SYSTEM_PROMPT_FILE` | ✅ | Path to system prompt `.txt` file (loaded at startup) |
+| `IRPF_SYSTEM_PROMPT` | — | Alternative: inline prompt (prefer file path) |
+| `INVITE_CODES_FILE` | ✅ | Path to `codes.txt` |
+| `OPS_LOG_FILE` | ✅ | Path to `ops_log.jsonl` |
+| `MAX_CODE_USES` | — | Max uses per invite code (default: `10`) |
+| `ANTHROPIC_MODEL` | — | Model override (default: `claude-sonnet-4-6`) |
+| `GITHUB_TOKEN` | — | GitHub PAT for `fetch-prompt.sh` (read access to prompt repo) |
 
-**The system prompt is not committed to this repository.** It lives in a private store and is injected at runtime via `IRPF_SYSTEM_PROMPT` or `IRPF_SYSTEM_PROMPT_FILE`. This keeps the reasoning logic out of the public repo while keeping the infrastructure fully auditable.
-
-Copy `.env.example` to `.env` and fill in your values before running.
+Copy `backend/.env.example` to `backend/.env` and fill in values before running.
 
 ---
 
 ## Running locally
 
-**Requirements:** Python 3.11+, pip
-
 ```bash
-# 1. Clone the repo
-git clone https://github.com/accordant-eu/ran-web.git
-cd ran-web
+git clone https://github.com/accordant-eu/ran-web.git && cd ran-web
+pip install -r backend/requirements.txt pytest httpx
+cp backend/.env.example backend/.env   # fill in ANTHROPIC_API_KEY + prompt
 
-# 2. Install backend dependencies
-cd backend
-pip install -r requirements.txt
+# Generate test codes
+python3 -c "
+import random, string
+for _ in range(5):
+    print('RENTA-' + ''.join(random.choices(string.ascii_uppercase+string.digits, k=4)))
+" > data/codes.txt
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env — add your ANTHROPIC_API_KEY and IRPF_SYSTEM_PROMPT
-
-# 4. Create a codes file with at least one invite code
-echo "RENTA-TEST01" > codes.txt
-
-# 5. Start the backend
-uvicorn main:app --reload --host 127.0.0.1 --port 8000
-
-# 6. Open the frontend
-# In a separate terminal or browser, open frontend/index.html
-# Or serve it: python -m http.server 3000 --directory ../frontend
+uvicorn backend.main:app --reload --port 8000
+# Frontend: open frontend/index.html in browser (or serve via Python http.server)
 ```
-
-The backend runs at `http://127.0.0.1:8000`. The frontend HTML file can be served statically and points to `/process` on the same host by default.
 
 ---
 
-## Deployment (VPS)
+## Deployment
 
-See `deploy/ran-web.service` for the systemd unit and `deploy/nginx.conf` for the nginx reverse proxy configuration targeting `ran.accordant.eu`.
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for the full deploy sequence including Docker, nginx, TLS, prompt fetching, and invite code seeding.
 
-HTTPS is handled by Let's Encrypt / Certbot — run `certbot --nginx -d ran.accordant.eu` after the nginx config is in place.
+---
+
+## Repository structure
+
+```
+ran-web/
+  README.md                   ← this file
+  DEPLOYMENT.md               ← full deploy guide
+  CONTRIBUTING.md             ← conventional commits, branch strategy
+  Dockerfile
+  docker-compose.yml
+  docker-entrypoint.sh        ← fixes bind-mount permissions at startup
+  pytest.ini
+  backend/
+    main.py                   ← FastAPI app — read this to verify zero retention
+    requirements.txt
+    .env.example
+  frontend/
+    index.html                ← bilingual UI (Spanish primary, English toggle)
+    style.css
+    marked.min.js             ← bundled markdown renderer (no CDN)
+  deploy/
+    nginx.conf                ← access_log off for /process, rate limiting
+    ran-rate-limit.conf       ← nginx rate limit zone definition
+    ran-web.service           ← systemd unit
+  scripts/
+    fetch-prompt.sh           ← pulls system prompt from private repo via GitHub API
+    seed-codes.sh             ← generates initial invite code batch
+    verify-zero-retention.sh  ← live server zero-retention audit
+  tests/
+    test_backend.py           ← unit + integration tests
+    test_zero_retention.py    ← zero-retention verification tests (18 tests)
+```
 
 ---
 
@@ -112,28 +229,7 @@ HTTPS is handled by Let's Encrypt / Certbot — run `certbot --nginx -d ran.acco
 - Not a full accounting tool
 - Not a replacement for a *gestor* or tax advisor — the system prompt is explicit about this
 - Not connected to any database or persistence layer
-- Not collecting analytics, cookies, or any tracking
-
----
-
-## Repository structure
-
-```
-ran-web/
-  README.md              ← you are here
-  backend/
-    main.py              ← FastAPI app (~150 lines, auditable)
-    requirements.txt
-    .env.example
-  frontend/
-    index.html           ← bilingual UI (Spanish primary, English)
-    style.css
-  deploy/
-    nginx.conf           ← nginx reverse proxy for ran.accordant.eu
-    ran-web.service      ← systemd unit for uvicorn
-```
-
-The prompts live in a private repository and are loaded at runtime. They are never committed here.
+- Not collecting analytics, cookies, or tracking of any kind
 
 ---
 
