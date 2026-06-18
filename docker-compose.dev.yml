@@ -1,7 +1,27 @@
-# Dev environment overrides.
-# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+# Standalone dev compose file — use instead of docker-compose.yml for dev.
+# Usage: docker compose -f docker-compose.dev.yml up -d
+networks:
+  ran-net:
+    driver: bridge
+
 services:
   ran-web:
+    build: .
     container_name: ran-web-dev
+    restart: unless-stopped
+    env_file:
+      - backend/.env
+    volumes:
+      - ./prompts:/app/prompts:ro
+      - ./data:/app/data
+    environment:
+      - INVITE_CODES_FILE=/app/data/codes.txt
+      - OPS_LOG_FILE=/app/data/ops_log.jsonl
     ports:
       - "127.0.0.1:8001:8000"
+    read_only: true
+    tmpfs:
+      - /tmp:size=50m
+      - /run:size=10m
+    networks:
+      - ran-net
