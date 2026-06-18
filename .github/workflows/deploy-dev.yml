@@ -20,6 +20,6 @@ jobs:
             set -e
             cd /srv/ran-web-dev
             git pull
-            docker compose -f docker-compose.yml -f docker-compose.dev.yml build
-            docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+            docker compose -f docker-compose.dev.yml build
+            docker compose -f docker-compose.dev.yml up -d
             echo "Dev deployed: $(git rev-parse --short HEAD)"
