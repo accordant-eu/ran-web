@@ -1,0 +1,7 @@
+# Dev environment overrides.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d
+services:
+  ran-web:
+    container_name: ran-web-dev
+    ports:
+      - "127.0.0.1:8001:8000"
