@@ -21,7 +21,7 @@ import string
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from io import BytesIO
-from typing import Generator
+from collections.abc import Generator
 
 import anthropic
 import pdfplumber
@@ -313,8 +313,7 @@ def stream_claude_response(
         system=system_prompt,
         messages=[{"role": "user", "content": user_message}],
     ) as stream:
-        for text_chunk in stream.text_stream:
-            yield text_chunk
+        yield from stream.text_stream
         if usage_out is not None:
             try:
                 msg = stream.get_final_message()
@@ -325,7 +324,7 @@ def stream_claude_response(
                     msg.usage.output_tokens * COST_PER_OUTPUT_TOKEN,
                     6,
                 )
-            except Exception:
+            except Exception:  # noqa: BLE001, S110
                 pass  # usage tracking is non-critical
 
     yield "\n\n__CODES__:" + json.dumps(new_codes)
@@ -345,7 +344,7 @@ async def health():
 async def process(
     invite_code: str = Form(...),
     language: str = Form("es"),
-    pdfs: list[UploadFile] = File(...),
+    pdfs: list[UploadFile] = File(...),  # noqa: B008
 ):
     """
     Main endpoint: accepts invite code + 1 or 2 PDF uploads.
@@ -418,7 +417,7 @@ async def process(
             text = extract_pdf_text(pdf_bytes)
         except ValueError as e:
             raise HTTPException(status_code=422, detail=str(e))
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.warning("PDF extraction failed for file %d: %s", i + 1, e)
             raise HTTPException(
                 status_code=422,
