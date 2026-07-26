@@ -18,10 +18,10 @@ import os
 import re
 import secrets
 import string
+from collections.abc import Generator
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from io import BytesIO
-from collections.abc import Generator
 
 import anthropic
 import pdfplumber
