@@ -32,21 +32,12 @@ function mergeFiles(newFiles) {
     if (!selectedFiles.find(e => e.name === f.name)) selectedFiles.push(f);
   }
   if (selectedFiles.length > 2) selectedFiles = selectedFiles.slice(0, 2);
-  syncInput();
   renderFiles();
 }
 
 function removeFile(name) {
   selectedFiles = selectedFiles.filter(f => f.name !== name);
-  syncInput();
   renderFiles();
-}
-
-function syncInput() {
-  // Rebuild the FileList from our mutable array
-  const dt = new DataTransfer();
-  selectedFiles.forEach(f => dt.items.add(f));
-  fileInput.files = dt.files;
 }
 
 function renderFiles() {
@@ -154,7 +145,7 @@ $('ran-form').addEventListener('submit', async e => {
   errorBox.hidden = true;
 
   const code  = $('invite-code').value.trim().toUpperCase();
-  const files = fileInput.files;
+  const files = selectedFiles;
 
   if (!code)          return showError('Introduce un código. / Enter a code.');
   if (!files.length)  return showError('Selecciona un PDF. / Select a PDF.');
