@@ -29,3 +29,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Runtime bind-mount (invite codes, ops_log) — not source
+/data/

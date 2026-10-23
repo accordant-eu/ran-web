@@ -10,7 +10,8 @@ WORKDIR /app
 
 # Install dependencies
 COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade "pip>=26.2.2" \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Copy application code and entrypoint
 COPY backend/main.py .
