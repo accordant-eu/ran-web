@@ -20,7 +20,7 @@ import secrets
 import string
 from collections.abc import Generator
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from io import BytesIO
 
 import anthropic
@@ -436,18 +436,18 @@ async def process(
             "Analyse both declarations together as a household filing."
         )
 
-    start_ts = datetime.now(timezone.utc).isoformat()
+    start_ts = datetime.now(UTC).isoformat()
 
     # --- Stream the response ---
     def response_generator():
-        start_ms  = datetime.now(timezone.utc).timestamp() * 1000
+        start_ms  = datetime.now(UTC).timestamp() * 1000
         usage: dict = {}
         completed = False
         try:
             yield from stream_claude_response(system_prompt, user_message, new_codes, usage_out=usage)
             completed = True
         finally:
-            end_ms = datetime.now(timezone.utc).timestamp() * 1000
+            end_ms = datetime.now(UTC).timestamp() * 1000
             entry: dict = {
                 "ts":              start_ts,
                 "code_used":       invite_code,

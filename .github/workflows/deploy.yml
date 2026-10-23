@@ -23,6 +23,6 @@ jobs:
             set -e
             cd /srv/ran-web
             git pull
-            docker compose build
+            docker compose build --pull
             docker compose up -d
             echo "Deployed: $(git rev-parse --short HEAD)"
