@@ -3,4 +3,4 @@ uvicorn[standard]
 pdfplumber
 anthropic
 python-multipart
-certifi>=2026.10.23
+certifi>=2026.11.20
